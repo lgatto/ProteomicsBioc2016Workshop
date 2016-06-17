@@ -128,7 +128,7 @@ ms <- ah[["AH49008"]]
 ms
 ```
 
-```{r hd, echo=FALSE}
+```{r mshd, echo=FALSE}
 hd <- header(ms)
 ```
 
@@ -174,8 +174,160 @@ pxref(px)
 Data files can then be downloaded with the `pxget` function as
 illustrated below. 
 
-```{r pxgetfile6, eval=FALSE}
+```{r pxgetfile6, eval=TRUE}
 mzf <- pxget(px, pxfiles(px)[6])
+mzf
+```
+
+## Manual download
+
+```{r}
+url <- "http://proteome.sysbiol.cam.ac.uk/lgatto/files/Thermo-HELA-PRT/"
+f1 <- downloadData(file.path(url, "Thermo_Hela_PRTC_1.mzML"))
+f2 <- downloadData(file.path(url, "Thermo_Hela_PRTC_2.mzML"))
+f3 <- downloadData(file.path(url, "Thermo_Hela_PRTC_3.mzML"))
+f3
+```
+
+# Handling raw MS data
+
+The `mzR` package provides an interface to the
+[proteowizard](http://proteowizard.sourceforge.net/) code base,
+the legacy RAMP is a non-sequential parser and other C/C++ code to
+access various raw data files, such as `mzML`, `mzXML`, `netCDF`, and
+`mzData`. The data is accessed on-disk, i.e it does not get loaded
+entirely in memory by default. The three main functions are
+`openMSfile` to create a file handle to a raw data file, `header` to
+extract metadata about the spectra contained in the file and `peaks`
+to extract one or multiple spectra of interest. Other functions such
+as `instrumentInfo`, or `runInfo` can be used to gather general
+information about a run.
+
+```{r rawms}
+library("mzR")
+ms <- openMSfile(mzf)
+ms
+```
+
+```{r hd}
+hd <- header(ms)
+dim(hd)
+names(hd)
+```
+
+```{r peaks}
+head(peaks(ms, 234))
+str(peaks(ms, 1:5))
+```
+
+#### Exercise
+
+> Extract the index of the MS2 spectrum with the highest base peak
+> intensity and plot its spectrum (using the `plot` method - we will
+> see more about MS data visualisation in the next section). Is the
+> data centroided or in profile mode?
+
+```{r, ex_raw, echo=FALSE, eval=FALSE, fig.align='center'}
+hd2 <- hd[hd$msLevel == 2, ]
+i <- which.max(hd2$basePeakIntensity)
+hd2[i, ]
+pi <- peaks(ms, hd2[i, 1])
+plot(pi, type = "h")
+mz <- hd2[i, "basePeakMZ"]
+plot(pi, type = "h", xlim = c(mz-0.5, mz+0.5))
+
+pj <- peaks(ms, 100)
+plot(pj, type = "l")
+plot(pj, type = "l", xlim = c(536,540))
+```
+
+# Handling identification data
+
+The `ProteomicsBioc2016Workshop` package distributes a small
+identification result file (see
+`?TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.mzid`) that we
+load and parse using infrastructure from the
+[`mzID`](http://bioconductor.org/packages/release/bioc/html/mzID.html)
+package.
+
+```{r id, cache=TRUE}
+library("mzID")
+(f <- dir(system.file("extdata", package = "ProteomicsBioc2016Workshop"),
+         pattern = "mzid", full.names = TRUE))
+id <- mzID(f)
+software(id)
+id
+```
+
+Various data can be extracted from the `mzID` object, using one the
+accessor functions such as `database`, `sofware`, `scans`, `peptides`,
+... The object can also be converted into a `data.frame` using the
+`flatten` function.
+
+```{r fid}
+head(flatten(id))
+```
+
+The `mzR` interface provides a similar interface. It is however much
+faster as it does not read all the data into memory and only extracts
+relevant data on demand. It has also accessor functions such as
+`softwareInfo`, `mzidInfo`, ... (use `showMethods(classes = "mzRident", where = "package:mzR")`)
+to see all available methods.
+
+```{r id2}
+library("mzR")
+id2 <- openIDfile(f)
+id2
+softwareInfo(id2)
+```
+
+The identification data can be accessed as a `data.frame` with the
+`psms` accessor.
+
+```{r fid2}
+head(psms(id2))
+```
+
+#### Exercise
+
+> Is there a relation between the length of a protein and the number
+> of identified peptides, conditioned by the (average) e-value of the
+> identifications?
+
+```{r, ex_id, echo = FALSE, eval=FALSE}
+fid <- flatten(id)
+x <- by(fid, fid$accession, function(x)
+    c(unique(x$length),
+      length(unique(x$pepseq)),
+      mean(x$'ms-gf:specevalue')))
+x <- data.frame(do.call(rbind, x))
+colnames(x) <- c("plength", "npep", "eval")
+x$bins <- cut(x$eval, summary(x$eval))
+library("lattice")
+xyplot(plength ~ npep | bins, data = x)
+```
+
+# MS/MS database search
+
+While searches are generally performed using third-party software
+independently of R or can be started from R using a `system` call, the
+`r Biocpkg("rTANDEM")` package allows one to execute such searches
+using the X!Tandem engine. 
+
+```{r rtandem, eval=FALSE}
+library("rTANDEM")
+?rtandem
+```
+
+The `r Biocpkg("MSGPplus")` package provides an interface to the very
+fast `MSGF+` engine.
+
+```{r msgfplus, eval = FALSE}
+library("MSGFplus")
+parameters <- msgfPar(database = 'milk-proteins.fasta',
+                      tolerance = '20 ppm',
+                      instrument = 'TOF')
+runMSGF(parameters, 'msraw.mzML')
 ```
 
 
