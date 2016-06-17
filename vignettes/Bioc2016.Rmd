@@ -15,9 +15,63 @@ vignette: >
 BiocStyle::markdown()
 ```
 
+```{r env, echo=FALSE}
+suppressPackageStartupMessages(library("RforProteomics"))
+```
+
+**Abstract** In this workshop, we will use R/Bioconductor packages to
+explore, process, visualise and understand mass spectrometry-based
+proteomics data, starting with raw data, and proceeding with
+identification and quantitation data, discussing some of their
+peculiarities compared to sequencing data along the way. The
+participants will gain a general overview of Bioconductor packages for
+mass spectrometry and proteomics, and learn how to navigate raw data
+and reconstruct quantitative data. The workshop is aimed at a beginner
+to intermediate level, such as, for example, seasoned R users who want
+to get started with mass spectrometry and proteomics, or proteomics
+practitioners who want to familiarise themselves with R and
+Bioconductor infrastructure.
+
+This short tutorial is part of the `ProteomicsBioc2016Workshop`
+package (version `r packageVersion("ProteomicsBioc2016Workshop")`),
+available at https://github.com/lgatto/ProteomicsBioc2016Workshop.
 
 
-## Session information
+------------
+> This vignette available under a
+> [**creative common CC-BY**](http://creativecommons.org/licenses/by/4.0/)
+> license. You are free to **share** (copy and redistribute the
+> material in any medium or format) and **adapt** (remix, transform,
+> and build upon the material) for any purpose, even commercially.
+------------
+
+# Introduction
+
+```{r, pk, echo=FALSE, warning=FALSE, cache=TRUE}
+biocv <- as.character(biocVersion())
+pp <- proteomicsPackages(biocv)
+msp <- massSpectrometryPackages(biocv)
+msdp <- massSpectrometryDataPackages(biocv)
+```
+
+In Bioconductor version `r biocv`, there are respectively `r nrow(pp)`
+proteomics and `r nrow(msp)` mass spectrometry software packages and
+`r nrow(msdp)` mass spectrometry experiment packages. These respective
+packages can be extracted with the `proteomicsPackages()`,
+`massSpectrometryPackages()` and `massSpectrometryDataPackages()` and
+explored interactively.
+
+
+```{r, pp, eval=FALSE}
+library("RforProteomics")
+pp <- proteomicsPackages("3.3")
+display(pp)
+```
+
+
+# Session information
+
+The source used to generate this document is available [here](https://github.com/lgatto/ProteomicsBioc2016Workshop/blob/master/vignettes/Bioc2016.Rmd).
 
 ```{r, si, echo=FALSE}
 print(sessionInfo(), local = FALSE)
