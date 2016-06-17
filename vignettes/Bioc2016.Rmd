@@ -1,0 +1,24 @@
+---
+title: "R/Bioconductor tools for mass spectrometry-based proteomics"
+author: "[Laurent Gatto](https://github.com/lgatto)"
+  BiocStyle::html_document:
+     toc: true
+     toc_depth: 1
+vignette: >
+  % \VignetteIndexEntry{R/Bioconductor tools for mass spectrometry-based proteomics}
+  % \VignetteEngine{knitr::rmarkdown}
+  % \VignetteKeyword{proteomics, mass spectrometry, data}
+---
+
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+
+
+## Session information
+
+```{r, si, echo=FALSE}
+print(sessionInfo(), local = FALSE)
+```
