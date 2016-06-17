@@ -17,6 +17,7 @@ BiocStyle::markdown()
 
 ```{r env, echo=FALSE}
 suppressPackageStartupMessages(library("RforProteomics"))
+suppressPackageStartupMessages(library("BiocInstaller"))
 ```
 
 **Abstract** In this workshop, we will use R/Bioconductor packages to
@@ -45,9 +46,28 @@ available at https://github.com/lgatto/ProteomicsBioc2016Workshop.
 > and build upon the material) for any purpose, even commercially.
 ------------
 
+
 # Introduction
 
-```{r, pk, echo=FALSE, warning=FALSE, cache=TRUE}
+## Installation instructions
+
+To install this package and build the vignette
+
+```{r install, eval=FALSE}
+biocLite("lgatto/ProteomicsBioc2016Workshop",
+         dependencies = TRUE, build_vignettes=TRUE)
+```
+
+To launch the vignette
+
+```{r launch, eval=FALSE}
+library("ProteomicsBioc2016Workshop")
+bioc2016()
+```
+
+## MS/proteomics software available in Bioconductor
+
+```{r pk, echo=FALSE, warning=FALSE, cache=TRUE}
 biocv <- as.character(biocVersion())
 pp <- proteomicsPackages(biocv)
 msp <- massSpectrometryPackages(biocv)
@@ -62,16 +82,108 @@ packages can be extracted with the `proteomicsPackages()`,
 explored interactively.
 
 
-```{r, pp, eval=FALSE}
+```{r pp, eval=FALSE}
 library("RforProteomics")
 pp <- proteomicsPackages("3.3")
 display(pp)
 ```
 
+## Mass spectrometry data
+
+```{r, datatab, results='asis', echo=FALSE}
+
+datatab <-
+    data.frame(Type = c("raw", "identification", "quantitation", "peak lists", "other"),
+               Format = c("mzML, mzXML, netCDF, mzData", "mzIdentML", "mzQuantML", "mgf", "mzTab"),
+               Package = c(
+                   "[`mzR`](http://bioconductor.org/packages/release/bioc/html/mzR.html) (read)",
+                   "[`mzID`](http://bioconductor.org/packages/release/bioc/html/mzID.html) and [`mzR`](http://bioconductor.org/packages/release/bioc/html/mzR.html) (read)",
+                   "",
+                   "[`MSnbase`](http://bioconductor.org/packages/release/bioc/html/MSnbase.html) (read/write)",
+                   "[`MSnbase`](http://bioconductor.org/packages/release/bioc/html/MSnbase.html) (read)"))
+kable(datatab)
+
+```
+
+# Getting data
+
+## AnnotationHub
+
+`r Biocpkg("AnnotationHub")` is a cloud resource set up and managed by
+the Bioconductor project that programmatically disseminates omics
+data. I am currently working on contributing
+[proteomics data](http://bioconductor.org/packages/devel/bioc/vignettes/ProteomicsAnnotationHubData/inst/doc/ProteomicsAnnotationHubData.html).
+
+```{r ah0}
+library("AnnotationHub")
+ah <- AnnotationHub()
+query(ah, "proteomics")
+```
+
+Below, we download a raw mass spectrometry dataset with identifier
+`AH49008` and store it in a variable names `ms`.
+
+```{r ah, message=FALSE}
+ms <- ah[["AH49008"]]
+ms
+```
+
+```{r hd, echo=FALSE}
+hd <- header(ms)
+```
+
+The data contains `r length(ms)` spectra - `r table(hd$msLevel)[[1]]`
+MS1 spectra and `r table(hd$msLevel)[[2]]` MS2 spectra. The filename,
+`r basename(fileName(ms))`, is not very descriptive because the data
+originates from the `AnnotationHub` cloud repository. If the data was
+read from a local file, is would be named as the `mzML` (or `mzXML`)
+file. 
+
+## ProteomeXchange
+
+Contemporary MS-based proteomics data is disseminated through the
+[ProteomeXchange](http://www.proteomexchange.org/) infrastructure,
+which centrally coordinates submission, storage and dissemination
+through multiple data repositories, such as the
+[PRIDE](https://www.ebi.ac.uk/pride/archive/) data base at the EBI for
+MS/MS experiments, [PASSEL](http://www.peptideatlas.org/passel/) at
+the ISB for SRM data and the
+[MassIVE](http://massive.ucsd.edu/ProteoSAFe/static/massive.jsp)
+resource. The `r Biocpkg("rpx")` is an interface to ProteomeXchange
+and provides a basic and unified access to PX data.
+
+```{r, rpx}
+library("rpx")
+pxannounced()
+```
+
+```{r, pxd}
+px <- PXDataset("PXD000001")
+px
+pxfiles(px)
+```
+
+Other metadata for the `px` dataset:
+
+```{r, pxvar, eval=FALSE}
+pxtax(px)
+pxurl(px)
+pxref(px)
+```
+
+Data files can then be downloaded with the `pxget` function as
+illustrated below. 
+
+```{r pxgetfile6, eval=FALSE}
+mzf <- pxget(px, pxfiles(px)[6])
+```
+
+
 
 # Session information
 
-The source used to generate this document is available [here](https://github.com/lgatto/ProteomicsBioc2016Workshop/blob/master/vignettes/Bioc2016.Rmd).
+The source used to generate this document is available
+[here](https://github.com/lgatto/ProteomicsBioc2016Workshop/blob/master/vignettes/Bioc2016.Rmd).
 
 ```{r, si, echo=FALSE}
 print(sessionInfo(), local = FALSE)
