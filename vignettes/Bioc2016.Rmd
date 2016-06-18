@@ -17,7 +17,11 @@ BiocStyle::markdown()
 
 ```{r env, echo=FALSE}
 suppressPackageStartupMessages(library("RforProteomics"))
-suppressPackageStartupMessages(library("BiocInstaller"))
+suppressPackageStartupMessages(library("AnnotationHub"))
+suppressMessages(library("BiocInstaller"))
+suppressPackageStartupMessages(library("lattice"))
+suppressPackageStartupMessages(library("gridExtra"))
+suppressPackageStartupMessages(library("mzID"))
 ```
 
 **Abstract** In this workshop, we will use R/Bioconductor packages to
@@ -246,8 +250,7 @@ plot(pj, type = "l", xlim = c(536,540))
 The `ProteomicsBioc2016Workshop` package distributes a small
 identification result file (see
 `?TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01.mzid`) that we
-load and parse using infrastructure from the
-[`mzID`](http://bioconductor.org/packages/release/bioc/html/mzID.html)
+load and parse using infrastructure from the `r Biocpkg("mzID")`
 package.
 
 ```{r id, cache=TRUE}
@@ -330,6 +333,348 @@ parameters <- msgfPar(database = 'milk-proteins.fasta',
 runMSGF(parameters, 'msraw.mzML')
 ```
 
+# High-level data interface
+
+The above sections introduced low-level interfaces to raw and
+identification results. The `r Biocpkg("MSnbase")` package provides
+abstractions for raw data through the `MSnExp` class and containers
+for quantification data via the `MSnSet` class. Both store the actual
+assay data (spectra or quantitation matrix) and sample and feature
+metadata, accessed with `spectra` (or the
+`[`, `[[` operators) or `exprs`, `pData` and `fData`.
+
+The figure below give a schematics of an `MSnSet` instance and the
+relation between the assay data and the respective feature and sample
+metadata.
+
+
+```{r, msnset, echo=FALSE, fig.width = 5, fig.height = 7, fig.align='center'}
+plot(NA, xlim = c(0, 5), ylim = c(0, 10), axes=FALSE, xlab = NA, ylab = NA)
+rect(0, 0, 3, 1.9)
+rect(0, 2, 3, 10)
+rect(3.05, 2, 5, 10)
+
+segments(seq(0, 3, length.out = 7),
+         rep(0, 7),
+         seq(0, 3, length.out = 7),
+         rep(10, 7),
+         lty = "dotted")
+
+segments(rep(0, 50),
+         seq(2, 10, length.out = 50),
+         rep(5, 100),
+         seq(2, 10, length.out = 50),
+         lty = "dotted")
+
+text(1.5, 1, "sample metadata", cex = 1.5)
+text(1.5, 6, "assay data", cex = 1.5)
+text(4, 6, "feature\nmetadata", cex = 1.5)
+```
+
+Another useful slot is `processingData`, accessed with `processingData(.)`, that records all the processing that objects have undergone since their creation (see examples below).
+
+The `readMSData` will parse the raw data, extract the MS2 spectra and
+construct an MS experiment file.
+
+```{r msnbase}
+library("MSnbase")
+quantFile <- dir(system.file(package = "MSnbase", dir = "extdata"),
+                 full.name = TRUE, pattern = "mzXML$")
+quantFile
+msexp <- readMSData(quantFile, verbose=FALSE)
+msexp
+```
+
+The identification results stemming from the same raw data file can
+then be used to add PSM matches.
+
+```{r addid}
+## find path to a mzIdentML file
+identFile <- dir(system.file(package = "MSnbase", dir = "extdata"),
+                 full.name = TRUE, pattern = "mzid$")
+identFile
+msexp <- addIdentificationData(msexp, identFile)
+fData(msexp)
+```
+
+```{r specplot}
+msexp[[1]]
+as(msexp[[1]], "data.frame")[100:105, ]
+```
+
+`MSnExp` object load all MS data into memory. This is a viable
+solution for MS2 data, but does not scale to MS1 data, expecially when
+multiple files are loaded together. With the help of
+[Johannes Rainer](http://github.com/jotsetung), a new `MSnExp` class
+supporting on disk access is being developed.
+
+# Visualising raw data
+
+## A full chromatogam
+
+```{r chromato}
+chromatogram(ms)
+```
+
+## Multiple chromatograms
+
+```{r chromato3, cache=TRUE}
+c1 <- chromatogram(f1)
+c2 <- chromatogram(f2, plot = FALSE)
+lines(c2, col = "steelblue", lty = "dashed")
+c3 <- chromatogram(f3, plot = FALSE)
+lines(c3, col = "orange", lty = "dotted")
+```
+
+## An extracted ion chromatogram
+
+```{r xic, cache=TRUE, fig.width=12}
+par(mfrow = c(1, 2))
+xic(ms, mz = 636.925, width = 0.01)
+x <- xic(ms, mz = 636.925, width = 0.01, rtlim = c(2120, 2200))
+```
+
+## Spectra
+
+We first load a test iTRAQ data called `itraqdata` and distributed as
+part of the `r Biocpkg("MSnbase")` package using the `data`
+function. This is a pre-packaged data that comes as a dedicated data
+structure called `MSnExp`. We then `plot` the 10th spectum using
+specific code that recognizes what to do with an element of an
+`MSnExp`.
+
+```{r itraqdata}
+data(itraqdata)
+itraqdata
+plot(itraqdata[[10]], reporters = iTRAQ4, full=TRUE) 
+```
+
+The `ms` data is not pre-packaged as an `MSnExp` data. It is a more
+bare-bone `r as.character(class(ms))` object, a pointer to a raw data
+file (here `r basename(fileName(ms))`): we need first to extract a
+spectrum of interest (here the 3071st spectrum, an MS1 spectrum), and
+use the generic `plot` function to visualise the spectrum.
+
+```{r ms1}
+plot(peaks(ms, 3071), type = "h",
+     xlab = "M/Z", ylab = "Intensity",     
+     sub = formatRt(hd[3071, "retentionTime"]))
+```
+
+The importance of flexible access to specialised data becomes visible
+in the figure below (taken from the `r Biocannopkg("RforProteomics")`
+[visualisation vignette](http://bioconductor.org/packages/release/data/experiment/vignettes/RforProteomics/inst/doc/RProtVis.html)).
+**Not only can we access specific data and understand/visualise them,
+but we can transverse all the data and extracted/visualise/understand
+structured slices of data.**
+
+
+In this code chunks we start by selecting relevant spectra of
+interest. We will focus on the first MS1 spectrum acquired after 30
+minutes of retention time.
+
+
+```{r pxd1, echo=FALSE}
+## (1) Open raw data file
+ms <- openMSfile(mzf)
+## (2) Extract the header information
+hd <- header(ms)
+## (3) MS1 spectra indices
+ms1 <- which(hd$msLevel == 1)
+## (4) Select MS1 spectra with retention time between 30 and 35 minutes
+rtsel <- hd$retentionTime[ms1] / 60 > 30 & hd$retentionTime[ms1] / 60 < 35
+## (5) Indeces of the 1st and 2d MS1 spectra after 30 minutes
+i <- ms1[which(rtsel)][1]
+j <- ms1[which(rtsel)][2]
+## (6) Interleaved MS2 spectra
+ms2 <- (i+1):(j-1)
+```
+
+Now now extract and plot all relevant information:
+
+1. The upper panel represents the chomatogram of the `r fileName(ms)`
+   raw data file, produced with `chomatogram`.
+
+```{r visfig01, eval=FALSE}
+chromatogram(ms)
+```
+
+2. We concentrate at a specific retention time, 
+   `r formatRt(hd[i, "retentionTime"])` minutes (`r hd[i, "retentionTime"]` seconds) 
+
+```{r visfig02, eval=FALSE}
+abline(v = hd[i, "retentionTime"], col = "red")
+```
+
+3. This corresponds to the `r i`th MS1 spectrum, shown on the second
+   row of figures.
+
+```{r visfig03, eval=FALSE}
+plot(peaks(ms, i), type = "l", xlim = c(400, 1000))
+legend("topright", bty = "n",
+       legend = paste0(
+           "Acquisition ", hd[i, "acquisitionNum"],  "\n",
+           "Retention time ", formatRt(hd[i, "retentionTime"])))
+```
+
+4. The ions that were selected for MS2 are highlighted by vertical
+   lines. These are represented in the bottom part of the figure.
+
+```{r visfig04, eval=FALSE}
+abline(v = hd[ms2, "precursorMZ"],
+       col = c("#FF000080",
+           rep("#12121280", 9)))
+```
+
+5. On the right, we zoom on the isotopic envelope of one peptide in
+   particular (the one highlighted with a red line).
+
+```{r visfig05, eval=FALSE}
+plot(peaks(ms, i), type = "l", xlim = c(521, 522.5),
+     yaxt = "n")
+```
+
+6. A final loop through the relevant MS2 spectra plots the
+   `length(ms2)` MS2 spectra highlighted above.
+
+```{r visfig06, eval=FALSE}
+for (ii in ms2) {
+    p <- peaks(ms, ii)
+    plot(p, xlab = "", ylab = "", type = "h", cex.axis = .6)
+    legend("topright", legend = paste0("Prec M/Z\n",
+                           round(hd[ii, "precursorMZ"], 2)),
+           bty = "n", cex = .8)
+}
+```
+
+```{r mslayout, echo=FALSE}
+## Preparing the layout (not shown)
+lout <- matrix(NA, ncol = 10, nrow = 8)
+lout[1:2, ] <- 1
+for (ii in 3:4)
+    lout[ii, ] <- c(2, 2, 2, 2, 2, 2, 3, 3, 3, 3)
+lout[5, ] <- rep(4:8, each = 2)
+lout[6, ] <- rep(4:8, each = 2)
+lout[7, ] <- rep(9:13, each = 2)
+lout[8, ] <- rep(9:13, each = 2)
+```
+
+Putting it all together:
+
+```{r visfig}
+layout(lout)
+par(mar=c(4,2,1,1))
+chromatogram(ms)
+
+abline(v = hd[i, "retentionTime"], col = "red")
+par(mar = c(3, 2, 1, 0))
+plot(peaks(ms, i), type = "l", xlim = c(400, 1000))
+legend("topright", bty = "n",
+       legend = paste0(
+           "Acquisition ", hd[i, "acquisitionNum"],  "\n",
+           "Retention time ", formatRt(hd[i, "retentionTime"])))
+abline(h = 0)
+abline(v = hd[ms2, "precursorMZ"],
+       col = c("#FF000080",
+           rep("#12121280", 9)))
+
+par(mar = c(3, 0.5, 1, 1))
+plot(peaks(ms, i), type = "l", xlim = c(521, 522.5),
+     yaxt = "n")
+abline(h = 0)
+abline(v = hd[ms2, "precursorMZ"], col = "#FF000080")
+
+##par(mar = omar)
+par(mar = c(2, 2, 0, 1))
+for (ii in ms2) {
+    p <- peaks(ms, ii)
+    plot(p, xlab = "", ylab = "", type = "h", cex.axis = .6)
+    legend("topright", legend = paste0("Prec M/Z\n",
+                           round(hd[ii, "precursorMZ"], 2)),
+           bty = "n", cex = .8)
+}
+```
+
+Below, we illustrate some additional visualisation and animations of
+raw MS data, also taken from the `r Biocannopkg("RforProteomics")`
+[visualisation vignette](http://bioconductor.org/packages/release/data/experiment/vignettes/RforProteomics/inst/doc/RProtVis.html). On
+the left, we have a heatmap visualisation of a MS map and a 3
+dimensional representation of the same data. On the right, 2 MS1
+spectra in blue and the set of interleaves 10 MS2 spectra.
+
+```{r msmap1, message=FALSE, fig.width=15, echo=TRUE}
+## (1) MS space heaptmap
+M <- MSmap(ms, ms1[rtsel], 521, 523, .005, hd)
+ff <- colorRampPalette(c("yellow", "steelblue"))
+trellis.par.set(regions=list(col=ff(100)))
+m1 <- plot(M, aspect = 1, allTicks = FALSE)
+## (2) Same data as (1), in 3 dimenstion
+M@map[msMap(M) == 0] <- NA
+m2 <- plot3D(M, rgl = FALSE)
+## (3) The 2 MS1 and 10 interleaved MS2 spectra from above
+i <- ms1[which(rtsel)][1]
+j <- ms1[which(rtsel)][2]
+M2 <- MSmap(ms, i:j, 100, 1000, 1, hd)
+m3 <- plot3D(M2)
+grid.arrange(m1, m2, m3, ncol = 3)
+```
+
+Below, we have animations build from extracting successive slices as above.
+
+```{r two-col-1, results='asis', echo=FALSE, out.extra=''}
+cat("<table class='container'><tr>")
+cat("<td>")
+```
+![MS animation 1](./Figures/msanim1.gif)
+```{r two-col-2, results='asis', echo=FALSE, out.extra=''}
+cat("</td>")
+cat("<td>")
+```
+ ![MS animation 2](./Figures/msanim2.gif)
+```{r two-col-3, results='asis', echo=FALSE, out.extra=''}
+cat("</td>")
+cat("</tr></table>")
+```
+
+
+# Identification data
+
+Annotated spectra and comparing spectra. 
+
+```{r id1, message=FALSE, fig.width=15, message=FALSE}
+par(mfrow = c(1, 2))
+itraqdata2 <- pickPeaks(itraqdata, verbose = FALSE)
+s <- "SIGFEGDSIGR"
+plot(itraqdata2[[14]], s, main = s)
+plot(itraqdata2[[25]], itraqdata2[[28]], sequences = rep("IMIDLDGTENK", 2))
+```
+
+The annotation of spectra is obtained by simulating fragmentation of a
+peptide and matching observed peaks to fragments:
+
+```{r fag}
+calculateFragments("SIGFEGDSIGR")
+```
+
+Visualising a pair of spectra means that we can access them, and that,
+in addition to plotting, we can manipluate them and perform
+computations. The two spectra corresponding to the `IMIDLDGTENK`
+peptide, for example have 
+`r compareSpectra(itraqdata2[[25]], itraqdata2[[28]], fun = "common")` 
+common peaks, a correlation of 
+`r round(compareSpectra(itraqdata2[[25]], itraqdata2[[28]], fun = "cor"), 3)` 
+and a dot product of 
+`r round(compareSpectra(itraqdata2[[25]], itraqdata2[[28]], fun = "dotproduct"), 3)` 
+(see `?compareSpectra` for details).
+
+There are 2 Bioconductor packages for peptide-spectrum matching
+directly in R, namely `r Biocpkg("MSGFplus")` and `r Biocpkg("rTANDEM")`,
+replying on `MSGF+` and `X!TANDEM` respectively.
+
+See also the `r Biocpkg("MSGFgui")` package for visualisation of
+identification data.
+
+![MSGFgui screenshot](./Figures/03-2-msgfgui_panel_BW.png)
 
 
 # Session information
