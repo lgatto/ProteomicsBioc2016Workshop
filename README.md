@@ -15,3 +15,5 @@ quantitative data. The workshop is aimed at a beginner to intermediate
 level, such as, for example, seasoned R users who want to get started
 with mass spectrometry and proteomics, or proteomics practitioners who
 want to familiarise themselves with R and Bioconductor infrastructure.
+
+Read the vignette is available [here](http://lgatto.github.io/ProteomicsBioc2016Workshop).
