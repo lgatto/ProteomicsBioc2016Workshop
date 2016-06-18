@@ -6,7 +6,8 @@ Authors@R: c(person("Laurent", "Gatto", role=c("aut", "cre"),
 Maintainer: Laurent Gatto <lg390@cam.ac.uk>
 Suggests: RforProteomics, mzR, mzID, MSnbase, rpx, MLInterfaces,
 	  pRoloc, pRolocdata, BiocInstaller, rTANDEM, shinyTANDEM,
-	  rmarkdown, knitr, BiocStyle, Pbase, AnnotationHub, MSGFplus	  
+	  rmarkdown, knitr, BiocStyle, Pbase, AnnotationHub, MSGFplus,
+	  gplots
 Description: In this workshop, we will use R/Bioconductor packages to
 	     explore, process, visualise and understand mass
 	     spectrometry-based proteomics data, starting with raw
