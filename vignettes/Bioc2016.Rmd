@@ -679,7 +679,7 @@ identification data.
 
 ![MSGFgui screenshot](./Figures/03-2-msgfgui_panel_BW.png)
 
-# Quantitative proteomics
+# Quantitative proteomics data
 
 There are a wide range of proteomics quantitation techniques that can
 broadly be classified as labelled vs. label-free, depending whether
@@ -695,14 +695,62 @@ dimnames(qtb) <- list(
 knitr::kable(qtb)
 ```
 
-* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` 
-  and `r Biocpkg("isboar")` for statistical analysis.  
-* Label-free: `r Biocpkg("xcms")` (metabolomics), `r CRANpkg("aLFQ")`
-  and `r CRANpkg("protiq")` for statistical analysis.
-* Counting: `r Biocpkg("MSnbase")`, `r Biocpkg("MSnID")` for
-  peptide-spectrum matching confidence assessment and 
-  `r Biocpkg("msmsTests")` for statistical analysis.
-* `r Biocpkg("MSstats")` for various statistical analyses
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` and `r Biocpkg("isboar")`.
+* Label-free: `r Biocpkg("xcms")` (metabolomics).
+* Counting: `r Biocpkg("MSnbase")` and `r Biocpkg("MSnID")` for
+  peptide-spectrum matching confidence assessment.
+* `r Githubpkg("vladpetyuk/N14N15")` for heavy Nitrogen-labelled data.
+
+## From raw data to quantitative data
+
+In terms of raw data quantitation, most efforts have been devoted to
+MS2-level quantitation. Label-free XIC quantitation has however been
+addressed in the frame of metabolomics data processing by the
+[`xcms`](http://bioconductor.org/packages/release/bioc/html/xcms.html)
+infrastructure. 
+
+### Isobaric tagging
+
+An `MSnExp` is converted to an `MSnSet` by the `quantitation`
+method. Below, we use the iTRAQ 4-plex isobaric tagging strategy
+(defined by the `iTRAQ4` parameter; other isbaric tags are available).
+
+```{r, itraq4plot, fig.align='center'}
+plot(msexp[[1]], full=TRUE, reporters = iTRAQ4)
+```
+
+```{r, quantitraq}
+msset <- quantify(msexp, method = "trap", reporters = iTRAQ4, verbose = FALSE)
+exprs(msset)
+processingData(msset)
+```
+
+**See also** The `r Biocpkg("isobar")` package supports quantitation
+from centroided `mgf` peak lists or its own tab-separated files that
+can be generated from Mascot and Phenyx vendor files.
+
+### Label-free MS2
+
+Other MS2 quantitation methods available in `quantify` include the
+(normalised) spectral index `SI` and (normalised) spectral abundance
+factor `SAF` or simply a simple count method.
+
+```{r, lfms2}
+exprs(si <- quantify(msexp, method = "SIn"))
+exprs(saf <- quantify(msexp, method = "NSAF"))
+```
+
+Note that spectra that have not been assigned any peptide (`NA`) or
+that match non-unique peptides (`npsm > 1`) are discarded in the
+counting process.
+
+### Spectral counting
+
+The `r Biocpkg("MSnID")` package provides enables to explore and
+assess the confidence of identification data using `mzid` files. A
+subset of all peptide-spectrum matches, that pass a specific false
+discovery rate theshold can them be converted to an `MSnSet`, where
+the number of peptide occurrences are used to populate the assay data.
 
 ## Importing third-party data
 
@@ -713,7 +761,7 @@ molecule tabular sections.
 
 ```{r, mztab}
 mztf <- pxget(px, pxfiles(px)[2])
-(mzt <- readMzTabData(mztf, what = "PEP"))
+(mzt <- readMzTabData(mztf, what = "PEP", version = "0.9"))
 ```
 
 It is also possible to import arbitrary spreadsheets as `MSnSet`
@@ -731,6 +779,36 @@ head(exprs(res))
 head(fData(res))
 ```
 
+# Quantitative data processing and analysis
+
+## Processing
+
+Processing quantitative proteomics data is very similar to processing
+transcriptomics data. When working with `MSnSet` instances, a set of
+methods for data processing and visualisation are readily available to
+streamline and track the process:
+
+- `purityCorrect` to correct for isobaric tag impurities
+- `normalise` (or `normalize`) to, well, normalise data using
+  quantile, vsn, mean, ... normalisation
+- `filterNA` to remove feature with (a certain proportion) of missing
+  values
+- `impute` to impute missing values using a wide range of methods
+  (more on this below)
+- `image`, `MAplot`, `plot2D` (for dimensionality reduction using PCA,
+  t-SNE, MDS, ...), ... to visualise data
+- ...
+
+## Differentially expression
+
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` 
+  and `r Biocpkg("isboar")` for statistical analysis. 
+* Label-free: `r Biocpkg("xcms")` (metabolomics), `r CRANpkg("aLFQ")`
+  and `r CRANpkg("protiq")` for statistical analysis.
+* Counting: `r Biocpkg("MSnbase")`, `r Biocpkg("MSnID")` for
+  peptide-spectrum matching confidence assessment and 
+  `r Biocpkg("msmsTests")` for statistical analysis.
+* `r Biocpkg("MSstats")` for various statistical analyses
 
 # Annotation
 

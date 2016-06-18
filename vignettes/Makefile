@@ -1,3 +1,6 @@
+# Used only to build the vignette manually during writing. Not used
+# during package building.
+
 all: 
 	make Bioc2016.md
 
