@@ -105,7 +105,6 @@ datatab <-
                    "[`MSnbase`](http://bioconductor.org/packages/release/bioc/html/MSnbase.html) (read/write)",
                    "[`MSnbase`](http://bioconductor.org/packages/release/bioc/html/MSnbase.html) (read)"))
 kable(datatab)
-
 ```
 
 # Getting data
@@ -673,6 +672,91 @@ See also the `r Biocpkg("MSGFgui")` package for visualisation of
 identification data.
 
 ![MSGFgui screenshot](./Figures/03-2-msgfgui_panel_BW.png)
+
+# Quantitative proteomics
+
+There are a wide range of proteomics quantitation techniques that can
+broadly be classified as labelled vs. label-free, depending whether
+the features are labelled prior the MS acquisition and the MS level at
+which quantitation is inferred, namely MS1 or MS2. 
+
+```{r, quanttab, echo=FALSE, results='asis'}
+qtb <- matrix(c("XIC", "Counting", "SILAC, 15N", "iTRAQ, TMT"),
+              nrow = 2, ncol = 2)
+dimnames(qtb) <- list(
+    'MS level' = c("MS1", "MS2"),
+    'Quantitation' = c("Label-free", "Labelled"))
+knitr::kable(qtb)
+```
+
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` 
+  and `r Biocpkg("isboar")` for statistical analysis.  
+* Label-free: `r Biocpkg("xcms")` (metabolomics), `r CRANpkg("aLFQ")`
+  and `r CRANpkg("protiq")` for statistical analysis.
+* Counting: `r Biocpkg("MSnbase")`, `r Biocpkg("MSnID")` for
+  peptide-spectrum matching confidence assessment and 
+  `r Biocpkg("msmsTests")` for statistical analysis.
+* `r Biocpkg("MSstats")` for various statistical analyses
+
+
+# Annotation
+
+All the
+[Bioconductor annotation infrastructure](http://bioconductor.org/help/workflows/annotation/annotation/),
+such as `r Biocpkg("biomaRt")`, `r Biocpkg("GO.db")`, organism
+specific annotations, .. are directly relevant to the analysis of
+proteomics data. Some proteomics-centred annotations such as the PSI
+Mass Spectrometry Ontology, Molecular Interaction (PSI MI 2.5) or
+Protein Modifications are available through the `r Biocpkg("rols")`. 
+Data from the
+[Human Protein Atlas](http://www.proteinatlas.org/) 
+(`r Biocpkg("hpar")`) and UniProt (`r Biocpkg("UniProt.ws")`) are also
+available.
+
+
+# More information
+
+## References and resources
+
+* [Visualisation of proteomics data using R and Bioconductor](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4510819/)
+* [Using R and Bioconductor for proteomics data analysis](http://arxiv.org/pdf/1305.6559v1.pdf)
+* `RforProteomics`: http://bioconductor.org/packages/RforProteomics
+* [R/Bioconductor workflow](http://bioconductor.org/help/workflows/proteomics/)
+
+## Other relevant packages/pipelines
+
+- Analysis of post translational modification with `r Biocpkg("isboar")`.
+- Processing and analysis or isobaric tagging mass spectrometry with
+  `r Biocpkg("isboar")` and `r Biocpkg("MSnbase")`.
+- Analysis of spatial proteomics data with `r Biocpkg("pRoloc")`.
+- Analysis of MALDI data with the `r Biocpkg("MALDIquant")` package.
+- Access to the Proteomics Standard Initiative Common QUery InterfaCe
+  with the `r Biocpkg("PSICQUIC")` package.
+- `r Biocpkg("Cardinal")`: A mass spectrometry imaging toolbox for
+  statistical analysis.
+- `r Biocpkg("MSnID")`: Utilities for Exploration and Assessment of
+  Confidence of LC-MSn Proteomics Identifications.
+- `r CRANpkg("protViz") `: Visualizing and Analyzing Mass Spectrometry
+  Related Data in Proteomics
+- `r CRANpkg("aLFQ")`: Estimating Absolute Protein Quantities from
+  Label-Free LC-MS/MS Proteomics Data.
+- `r CRANpkg("protiq")`: Protein (identification and) quantification
+  based on peptide evidence.  
+- `r Biocpkg("MSstats")`: Protein Significance Analysis in DDA, SRM
+  and DIA for Label-free or Label-based Proteomics Experiments
+
+
+### DIA
+
+- Analysis of label-free data from a Synapt G2 (including ion
+  mobility) with `r Biocpkg("synatpter")`.
+- `r Biocpkg("SWATH2stats")`: Transform and Filter SWATH Data for
+  Statistical Packages and
+- `r Biocpkg("specL")`: Prepare Peptide Spectrum Matches for Use in
+  Targeted Proteomics
+- `r Biocpkg("SwathXtend")`: SWATH extended library generation and
+  satistical data analysis
+
 
 # Session information
 
