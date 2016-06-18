@@ -52,6 +52,10 @@ available at https://github.com/lgatto/ProteomicsBioc2016Workshop.
 > and build upon the material) for any purpose, even commercially.
 
 
+**Modified:** `r file.info("Bioc2016.Rmd")$mtime`<br />
+**Compiled**: `r date()`
+
+
 # Introduction
 
 ## Installation instructions
