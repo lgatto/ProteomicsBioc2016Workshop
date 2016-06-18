@@ -1,6 +1,7 @@
 ---
 title: "R/Bioconductor tools for mass spectrometry-based proteomics"
 author: "[Laurent Gatto](https://github.com/lgatto)"
+output:
   BiocStyle::html_document:
      toc: true
      toc_depth: 1
@@ -42,13 +43,11 @@ package (version `r packageVersion("ProteomicsBioc2016Workshop")`),
 available at https://github.com/lgatto/ProteomicsBioc2016Workshop.
 
 
-------------
 > This vignette available under a
 > [**creative common CC-BY**](http://creativecommons.org/licenses/by/4.0/)
 > license. You are free to **share** (copy and redistribute the
 > material in any medium or format) and **adapt** (remix, transform,
 > and build upon the material) for any purpose, even commercially.
-------------
 
 
 # Introduction
@@ -669,13 +668,11 @@ and a dot product of
 
 There are 2 Bioconductor packages for peptide-spectrum matching
 directly in R, namely `r Biocpkg("MSGFplus")` and `r Biocpkg("rTANDEM")`,
-replying on `MSGF+` and `X!TANDEM` respectively.
-
+replying on `MSGF+` and `X!TANDEM` respectively. 
 See also the `r Biocpkg("MSGFgui")` package for visualisation of
 identification data.
 
 ![MSGFgui screenshot](./Figures/03-2-msgfgui_panel_BW.png)
-
 
 # Session information
 

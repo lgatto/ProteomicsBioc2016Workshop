@@ -1,7 +1,6 @@
 all: 
 	make Bioc2016.md
 
-setvars:
 ifeq (${R_HOME},)
 R_HOME= $(shell R-3.3 RHOME)
 endif
@@ -9,7 +8,10 @@ endif
 .PHONY: clean allclean all makepre
 
 %.md: %.Rmd
-	Rscript -e 'require("knitr"); knit("$^")'
+	$(R_HOME)/bin/Rscript -e 'knitr::knit("$^")'
+
+%.html: %.md
+	$(R_HOME)/bin/Rscript -e 'rmarkdown::render("$^")'
 
 clean:	
 	rm -f .Rhistory
