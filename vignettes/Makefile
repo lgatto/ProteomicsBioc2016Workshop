@@ -2,7 +2,7 @@
 # during package building.
 
 all: 
-	make Bioc2016.md
+	make Bioc2016.html
 
 ifeq (${R_HOME},)
 R_HOME= $(shell R-3.3 RHOME)

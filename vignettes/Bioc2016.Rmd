@@ -801,14 +801,41 @@ streamline and track the process:
 
 ## Differentially expression
 
-* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` 
-  and `r Biocpkg("isboar")` for statistical analysis. 
-* Label-free: `r Biocpkg("xcms")` (metabolomics), `r CRANpkg("aLFQ")`
-  and `r CRANpkg("protiq")` for statistical analysis.
-* Counting: `r Biocpkg("MSnbase")`, `r Biocpkg("MSnID")` for
-  peptide-spectrum matching confidence assessment and 
-  `r Biocpkg("msmsTests")` for statistical analysis.
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("isboar")`
+* Label-free: `r CRANpkg("aLFQ")` and `r CRANpkg("protiq")`
+* `r Biocpkg("msmsTests")` for the RNA-seq count-based models and
+  tests
+
+```{r msmstest}
+library("msmsTests")
+(data(msms.dataset))
+msms.dataset
+(e <- pp.msms.data(msms.dataset))
+```
+
+```{r msmstest2}
+pData(e)
+null.f <- "y~batch"
+alt.f <- "y~treat+batch"
+div <- apply(exprs(e),2,sum)
+res <- msms.edgeR(e,alt.f,null.f,div=div,fnm="treat")     
+head(res)
+```
+  
 * `r Biocpkg("MSstats")` for various statistical analyses
+* and of course `r Biocpkg("limma")`
+* ...
+
+## Machine learning
+
+* `MSnSet` support `r Biocpkg("MLInterfaces")` out-of-the-box.
+* While tailor for spatial proteomics data, `r Biocpkg("pRoloc")`'s
+  machline learning methods are useful in a wide range of cases and
+  work with `MSnSet` instances.
+
+## Missing values
+
+
 
 # Annotation
 
