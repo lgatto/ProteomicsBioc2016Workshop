@@ -472,7 +472,7 @@ interest. We will focus on the first MS1 spectrum acquired after 30
 minutes of retention time.
 
 
-```{r pxd1, echo=FALSE}
+```{r pxd1}
 ## (1) Open raw data file
 ms <- openMSfile(mzf)
 ## (2) Extract the header information
@@ -481,7 +481,7 @@ hd <- header(ms)
 ms1 <- which(hd$msLevel == 1)
 ## (4) Select MS1 spectra with retention time between 30 and 35 minutes
 rtsel <- hd$retentionTime[ms1] / 60 > 30 & hd$retentionTime[ms1] / 60 < 35
-## (5) Indeces of the 1st and 2d MS1 spectra after 30 minutes
+## (5) Indices of the 1st and 2nd MS1 spectra after 30 minutes
 i <- ms1[which(rtsel)][1]
 j <- ms1[which(rtsel)][2]
 ## (6) Interleaved MS2 spectra
@@ -493,21 +493,22 @@ Now now extract and plot all relevant information:
 1. The upper panel represents the chomatogram of the `r fileName(ms)`
    raw data file, produced with `chomatogram`.
 
-```{r visfig01, eval=FALSE}
+```{r visfig01}
 chromatogram(ms)
 ```
 
 2. We concentrate at a specific retention time, 
    `r formatRt(hd[i, "retentionTime"])` minutes (`r hd[i, "retentionTime"]` seconds) 
 
-```{r visfig02, eval=FALSE}
+```{r visfig02}
+chromatogram(ms)
 abline(v = hd[i, "retentionTime"], col = "red")
 ```
 
 3. This corresponds to the `r i`th MS1 spectrum, shown on the second
    row of figures.
 
-```{r visfig03, eval=FALSE}
+```{r visfig03}
 plot(peaks(ms, i), type = "l", xlim = c(400, 1000))
 legend("topright", bty = "n",
        legend = paste0(
@@ -518,7 +519,12 @@ legend("topright", bty = "n",
 4. The ions that were selected for MS2 are highlighted by vertical
    lines. These are represented in the bottom part of the figure.
 
-```{r visfig04, eval=FALSE}
+```{r visfig04}
+plot(peaks(ms, i), type = "l", xlim = c(400, 1000))
+legend("topright", bty = "n",
+       legend = paste0(
+           "Acquisition ", hd[i, "acquisitionNum"],  "\n",
+           "Retention time ", formatRt(hd[i, "retentionTime"])))
 abline(v = hd[ms2, "precursorMZ"],
        col = c("#FF000080",
            rep("#12121280", 9)))
@@ -527,15 +533,16 @@ abline(v = hd[ms2, "precursorMZ"],
 5. On the right, we zoom on the isotopic envelope of one peptide in
    particular (the one highlighted with a red line).
 
-```{r visfig05, eval=FALSE}
-plot(peaks(ms, i), type = "l", xlim = c(521, 522.5),
-     yaxt = "n")
+```{r visfig05}
+plot(peaks(ms, i), type = "l", xlim = c(521, 522.5))
+abline(v = hd[ms2, "precursorMZ"], col = "#FF000080")
 ```
 
 6. A final loop through the relevant MS2 spectra plots the
    `length(ms2)` MS2 spectra highlighted above.
 
-```{r visfig06, eval=FALSE}
+```{r visfig06, fig.width = 8, fig.height = 10}
+par(mfrow = c(5, 2), mar = c(2, 2, 0, 1))
 for (ii in ms2) {
     p <- peaks(ms, ii)
     plot(p, xlab = "", ylab = "", type = "h", cex.axis = .6)
@@ -582,7 +589,6 @@ plot(peaks(ms, i), type = "l", xlim = c(521, 522.5),
 abline(h = 0)
 abline(v = hd[ms2, "precursorMZ"], col = "#FF000080")
 
-##par(mar = omar)
 par(mar = c(2, 2, 0, 1))
 for (ii in ms2) {
     p <- peaks(ms, ii)
@@ -697,6 +703,33 @@ knitr::kable(qtb)
   peptide-spectrum matching confidence assessment and 
   `r Biocpkg("msmsTests")` for statistical analysis.
 * `r Biocpkg("MSstats")` for various statistical analyses
+
+## Importing third-party data
+
+The PSI `mzTab` file format is aimed at providing a simpler (than XML
+formats) and more accessible file format to the wider community. It is
+composed of a key-value metadata section and peptide/protein/small
+molecule tabular sections. 
+
+```{r, mztab}
+mztf <- pxget(px, pxfiles(px)[2])
+(mzt <- readMzTabData(mztf, what = "PEP"))
+```
+
+It is also possible to import arbitrary spreadsheets as `MSnSet`
+objects into R with the `readMSnSet2` function. The main 2 arguments
+of the function are (1) a text-based spreadsheet or a `data.frame` and
+(2) column names of indices that identify the quantitation data.
+
+```{r, readmsnset2}
+csv <- dir(system.file ("extdata" , package = "pRolocdata"),
+           full.names = TRUE, pattern = "pr800866n_si_004-rep1.csv")
+getEcols(csv, split = ",")
+ecols <- 7:10
+res <- readMSnSet2(csv, ecols)
+head(exprs(res))
+head(fData(res))
+```
 
 
 # Annotation
