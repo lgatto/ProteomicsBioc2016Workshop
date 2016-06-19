@@ -1,1 +1,8 @@
 vignettes/Makefile
+
+vignettes/TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01-20141210.mzML
+vignettes/Thermo_Hela_PRTC_1.mzML
+vignettes/Thermo_Hela_PRTC_2.mzML
+vignettes/Thermo_Hela_PRTC_3.mzML
+vignettes/cache
+vignettes/figure

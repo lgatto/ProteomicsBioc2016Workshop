@@ -17,6 +17,7 @@ BiocStyle::markdown()
 ```
 
 ```{r env, echo=FALSE}
+suppressPackageStartupMessages(library("ProteomicsBioc2016Workshop"))
 suppressPackageStartupMessages(library("RforProteomics"))
 suppressPackageStartupMessages(library("AnnotationHub"))
 suppressMessages(library("BiocInstaller"))
@@ -874,7 +875,53 @@ heatmap.2(exprs(x), col = c("lightgray", "black"),
   [paper](http://pubs.acs.org/doi/abs/10.1021/acs.jproteome.5b00981)). Values
   missing at random, and those missing not at random should be imputed
   with different methods: left-censored methods are adequate for the
-  latter, while hot-desk methods should be used for the former.
+  latter, while hot deck methods should be used for the former.
+
+# Major differences with RNASeq
+
+- missing values (see above)
+- coverage
+- protein inference
+- identifier mapping
+
+## Coverage
+
+- Coverage in proteomics in `%`
+- [Coverage](http://www.ncbi.nlm.nih.gov/pubmed/24434847) in RNA-Seq in fold `X`
+
+The following values are higher bounds, *without* peptide filtering for
+about 80000 *gene groups* 
+
+
+```{r}
+data(cvg)
+hist(cvg$coverage, breaks = 100, xlab = "coverage", main = "")
+```
+
+And
+
+- the majority of peptides map to a minority of proteins different
+
+- peptides within one protein can be differently detectable in MS
+  acquistions
+
+
+## Protein inference and protein groups
+
+![Peptide evidence classes](./Figures/nbt0710-647-F2.png)
+
+From [Qeli and Ahrens (2010)](http://www.ncbi.nlm.nih.gov/pubmed/20622826).
+See also [Nesvizhskii and Aebersold (2005)](http://www.ncbi.nlm.nih.gov/pubmed/16009968).
+
+Often, in proteomics experiments, the features represent single
+proteins and **groups** of indistinguishable or non-differentiable
+proteins identified by shared (non-unique) peptides.
+
+**Caveat**: Mapping between protein groups and unique transcripts?
+
+
+## Identifier mapping
+
 
 # Annotation
 
