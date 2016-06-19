@@ -1,1 +1,3 @@
+importFrom("utils", "vignette")
+
 export(bioc2016)
