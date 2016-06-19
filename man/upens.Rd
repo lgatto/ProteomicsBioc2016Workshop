@@ -23,8 +23,6 @@ data("upens")
 data("upenst")
 }
 
-
-}
 \examples{
 \dontrun{
     library("Pbase")
