@@ -22,7 +22,10 @@ Suggests:
     Pbase,
     AnnotationHub,
     MSGFplus,
-    gplots
+    gplots,
+    Biostrings,
+    UniProt.ws,
+    biomaRt
 Description: In this workshop, we will use R/Bioconductor packages to
     explore, process, visualise and understand mass
     spectrometry-based proteomics data, starting with raw

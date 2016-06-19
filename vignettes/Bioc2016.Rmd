@@ -917,10 +917,6 @@ heatmap.2(exprs(x), col = c("lightgray", "black"),
   method.
   
 
-  
-
-
-
 ## Coverage
 
 - Coverage in proteomics in `%`
@@ -954,11 +950,36 @@ Often, in proteomics experiments, the features represent single
 proteins and **groups** of indistinguishable or non-differentiable
 proteins identified by shared (non-unique) peptides.
 
-**Caveat**: Mapping between protein groups and unique transcripts?
-
-
 ## Identifier mapping
 
+The latest UniProt 
+
+```{r up}
+data(upens)
+data(upenst)
+```
+
+Where `upens` and `upenst` where created by querying the Ensembl gene
+and transcript identifiers for all human UniProtKB accession numbers
+agains the UniProt webservices.
+
+```{r upws, eval=FALSE}
+library("Biostrings")
+f <- downloadData("ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640_9606.fasta.gz")
+up <- Proteins(f)
+library("UniProt.ws")
+upws <- UniProt.ws()
+upens  <- select(upws, seqnames(up), "ENSEMBL", "UNIPROTKB")
+upenst <- select(upws, seqnames(up), "ENSEMBL_TRANSCRIPT", "UNIPROTKB")
+```
+
+```{r idmappingplot}
+par(mfrow = c(2, 1))
+barplot(table(tapply(upens[, 2], upens[, 1], function(x) length(na.omit(x)))),
+        main = "Ensembl genes - UnitProtKB mapping")
+barplot(table(tapply(upenst[, 2], upenst[, 1], function(x) length(na.omit(x)))),
+        main = "Ensembl transcripts - UnitProtKB mapping")
+```
 
 # Annotation
 
