@@ -960,19 +960,10 @@ data(upenst)
 
 Where `upens` and `upenst` where created by querying the Ensembl gene
 and transcript identifiers for all human UniProtKB accession numbers
-agains the UniProt webservices.
+agains the UniProt webservices. (See `?upens` for details.)
 
-```{r upws, eval=FALSE}
-library("Biostrings")
-f <- downloadData("ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/reference_proteomes/Eukaryota/UP000005640_9606.fasta.gz")
-up <- Proteins(f)
-library("UniProt.ws")
-upws <- UniProt.ws()
-upens  <- select(upws, seqnames(up), "ENSEMBL", "UNIPROTKB")
-upenst <- select(upws, seqnames(up), "ENSEMBL_TRANSCRIPT", "UNIPROTKB")
-```
 
-```{r idmappingplot}
+```{r idmappingplot, echo=FALSE}
 par(mfrow = c(2, 1))
 barplot(table(tapply(upens[, 2], upens[, 1], function(x) length(na.omit(x)))),
         main = "Ensembl genes - UnitProtKB mapping")
