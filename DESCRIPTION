@@ -19,7 +19,6 @@ Suggests:
     rmarkdown,
     knitr,
     BiocStyle,
-    Pbase,
     AnnotationHub,
     MSGFplus,
     gplots,
