@@ -17,6 +17,7 @@ BiocStyle::markdown()
 ```
 
 ```{r env, echo=FALSE}
+.cache <- FALSE
 suppressPackageStartupMessages(library("ProteomicsBioc2016Workshop"))
 suppressPackageStartupMessages(library("RforProteomics"))
 suppressPackageStartupMessages(library("AnnotationHub"))
@@ -77,7 +78,7 @@ bioc2016()
 
 ## MS/proteomics software available in Bioconductor
 
-```{r pk, echo=FALSE, warning=FALSE, cache=TRUE}
+```{r pk, echo=FALSE, warning=FALSE, cache=.cache}
 biocv <- as.character(biocVersion())
 pp <- proteomicsPackages(biocv)
 msp <- massSpectrometryPackages(biocv)
@@ -228,12 +229,10 @@ head(peaks(ms, 234))
 str(peaks(ms, 1:5))
 ```
 
-#### Exercise
-
-> Extract the index of the MS2 spectrum with the highest base peak
-> intensity and plot its spectrum (using the `plot` method - we will
-> see more about MS data visualisation in the next section). Is the
-> data centroided or in profile mode?
+> **Exercise** Extract the index of the MS2 spectrum with the highest
+> base peak intensity and plot its spectrum (using the `plot` method -
+> we will see more about MS data visualisation in the next
+> section). Is the data centroided or in profile mode?
 
 ```{r, ex_raw, echo=FALSE, eval=FALSE, fig.align='center'}
 hd2 <- hd[hd$msLevel == 2, ]
@@ -257,7 +256,7 @@ identification result file (see
 load and parse using infrastructure from the `r Biocpkg("mzID")`
 package.
 
-```{r id, cache=TRUE}
+```{r id, cache=.cache}
 library("mzID")
 (f <- dir(system.file("extdata", package = "ProteomicsBioc2016Workshop"),
          pattern = "mzid", full.names = TRUE))
@@ -295,11 +294,9 @@ The identification data can be accessed as a `data.frame` with the
 head(psms(id2))
 ```
 
-#### Exercise
-
-> Is there a relation between the length of a protein and the number
-> of identified peptides, conditioned by the (average) e-value of the
-> identifications?
+> **Exercise** Is there a relation between the length of a protein and
+> the number of identified peptides, conditioned by the (average)
+> e-value of the identifications?
 
 ```{r, ex_id, echo = FALSE, eval=FALSE}
 fid <- flatten(id)
@@ -424,7 +421,7 @@ chromatogram(ms)
 
 ## Multiple chromatograms
 
-```{r chromato3, cache=TRUE}
+```{r chromato3, cache=.cache}
 c1 <- chromatogram(f1)
 c2 <- chromatogram(f2, plot = FALSE)
 lines(c2, col = "steelblue", lty = "dashed")
@@ -432,7 +429,7 @@ lines(c2, col = "steelblue", lty = "dashed")
 
 ## An extracted ion chromatogram
 
-```{r xic, cache=TRUE, fig.width=12}
+```{r xic, cache=.cache, fig.width=12}
 par(mfrow = c(1, 2))
 xic(ms, mz = 636.925, width = 0.01)
 x <- xic(ms, mz = 636.925, width = 0.01, rtlim = c(2120, 2200))
