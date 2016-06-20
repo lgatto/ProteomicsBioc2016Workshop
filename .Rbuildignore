@@ -8,3 +8,4 @@ vignettes/figure
 vignettes/F063721.dat-mztab.txt
 vignettes/Bioc2016.md
 vignettes/Bioc2016.html
+.travis.yml

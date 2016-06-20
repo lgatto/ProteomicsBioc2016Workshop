@@ -1,6 +1,8 @@
 R/Bioconductor tools for mass spectrometry-based proteomics
 ===========================================================
 
+[![Build Status](https://travis-ci.org/lgatto/ProteomicsBioc2016Workshop.svg?branch=master)](https://travis-ci.org/lgatto/ProteomicsBioc2016Workshop)
+
 *[Bioconductor conference](http://bioconductor.org/help/course-materials/2016/BioC2016/),
 Stanford University, 26 July 2016*
 
