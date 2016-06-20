@@ -17,6 +17,7 @@ BiocStyle::markdown()
 ```
 
 ```{r env, echo=FALSE}
+suppressPackageStartupMessages(library("ProteomicsBioc2016Workshop"))
 suppressPackageStartupMessages(library("RforProteomics"))
 suppressPackageStartupMessages(library("AnnotationHub"))
 suppressMessages(library("BiocInstaller"))
@@ -193,8 +194,7 @@ mzf
 url <- "http://proteome.sysbiol.cam.ac.uk/lgatto/files/Thermo-HELA-PRT/"
 f1 <- downloadData(file.path(url, "Thermo_Hela_PRTC_1.mzML"))
 f2 <- downloadData(file.path(url, "Thermo_Hela_PRTC_2.mzML"))
-f3 <- downloadData(file.path(url, "Thermo_Hela_PRTC_3.mzML"))
-f3
+f1
 ```
 
 # Handling raw MS data
@@ -375,7 +375,9 @@ text(1.5, 6, "assay data", cex = 1.5)
 text(4, 6, "feature\nmetadata", cex = 1.5)
 ```
 
-Another useful slot is `processingData`, accessed with `processingData(.)`, that records all the processing that objects have undergone since their creation (see examples below).
+Another useful slot is `processingData`, accessed with
+`processingData(.)`, that records all the processing that objects have
+undergone since their creation (see examples below).
 
 The `readMSData` will parse the raw data, extract the MS2 spectra and
 construct an MS experiment file.
@@ -407,14 +409,14 @@ as(msexp[[1]], "data.frame")[100:105, ]
 ```
 
 `MSnExp` object load all MS data into memory. This is a viable
-solution for MS2 data, but does not scale to MS1 data, expecially when
+solution for MS2 data, but does not scale to MS1 data, especially when
 multiple files are loaded together. With the help of
 [Johannes Rainer](http://github.com/jotsetung), a new `MSnExp` class
 supporting on disk access is being developed.
 
 # Visualising raw data
 
-## A full chromatogam
+## A full chromatogram
 
 ```{r chromato}
 chromatogram(ms)
@@ -426,8 +428,6 @@ chromatogram(ms)
 c1 <- chromatogram(f1)
 c2 <- chromatogram(f2, plot = FALSE)
 lines(c2, col = "steelblue", lty = "dashed")
-c3 <- chromatogram(f3, plot = FALSE)
-lines(c3, col = "orange", lty = "dotted")
 ```
 
 ## An extracted ion chromatogram
@@ -443,8 +443,8 @@ x <- xic(ms, mz = 636.925, width = 0.01, rtlim = c(2120, 2200))
 We first load a test iTRAQ data called `itraqdata` and distributed as
 part of the `r Biocpkg("MSnbase")` package using the `data`
 function. This is a pre-packaged data that comes as a dedicated data
-structure called `MSnExp`. We then `plot` the 10th spectum using
-specific code that recognizes what to do with an element of an
+structure called `MSnExp`. We then `plot` the 10th spectrum using
+specific code that recognises what to do with an element of an
 `MSnExp`.
 
 ```{r itraqdata}
@@ -496,8 +496,8 @@ ms2 <- (i+1):(j-1)
 
 Now now extract and plot all relevant information:
 
-1. The upper panel represents the chomatogram of the `r fileName(ms)`
-   raw data file, produced with `chomatogram`.
+1. The upper panel represents the chromatogram of the `r fileName(ms)`
+   raw data file, produced with `chromatogram`.
 
 ```{r visfig01}
 chromatogram(ms)
@@ -667,7 +667,7 @@ calculateFragments("SIGFEGDSIGR")
 ```
 
 Visualising a pair of spectra means that we can access them, and that,
-in addition to plotting, we can manipluate them and perform
+in addition to plotting, we can manipulate them and perform
 computations. The two spectra corresponding to the `IMIDLDGTENK`
 peptide, for example have 
 `r compareSpectra(itraqdata2[[25]], itraqdata2[[28]], fun = "common")` 
@@ -719,7 +719,7 @@ infrastructure.
 
 An `MSnExp` is converted to an `MSnSet` by the `quantitation`
 method. Below, we use the iTRAQ 4-plex isobaric tagging strategy
-(defined by the `iTRAQ4` parameter; other isbaric tags are available).
+(defined by the `iTRAQ4` parameter; other isobaric tags are available).
 
 ```{r, itraq4plot, fig.align='center'}
 plot(msexp[[1]], full=TRUE, reporters = iTRAQ4)
@@ -755,7 +755,7 @@ counting process.
 The `r Biocpkg("MSnID")` package provides enables to explore and
 assess the confidence of identification data using `mzid` files. A
 subset of all peptide-spectrum matches, that pass a specific false
-discovery rate theshold can them be converted to an `MSnSet`, where
+discovery rate threshold can them be converted to an `MSnSet`, where
 the number of peptide occurrences are used to populate the assay data.
 
 ## Importing third-party data
@@ -836,8 +836,12 @@ head(res)
 
 * `MSnSet` support `r Biocpkg("MLInterfaces")` out-of-the-box.
 * While tailor for spatial proteomics data, `r Biocpkg("pRoloc")`'s
-  machline learning methods are useful in a wide range of cases and
+  machine learning methods are useful in a wide range of cases and
   work with `MSnSet` instances.
+
+
+
+# Some differences with RNASeq and transcriptomics in general
 
 ## Missing values
 
@@ -847,6 +851,46 @@ data(naset)
 naplot(naset, col = "black")
 ```
 
+### Filtering
+
+One solution is to remove all or part of the features that have
+missing values (see `?filterNA`).
+
+```{r filterNA}
+flt <- filterNA(naset)
+processingData(flt)
+```
+
+### Identification transfer
+
+Identification transfer between acquisitions (label-free): if a feature
+was not acquired in MS2 in one replicate, it is possible to find the
+ion in MS space based on the M/Z and retention time coordinates of the
+same ion in a replicate where it was identified. (An example of this
+is implemented in the `r Biocpkg("synapter")` package).
+
+### Imputation
+
+It is of course possible to impute missing values (`?impute`). This is
+however not a straightforward thing, as is likely to dramatically fail
+when a high proportion of data is missing (10s of %). But also, there
+are two types of mechanisms resulting in missing values in LC/MSMS
+experiments.
+
+* Missing values resulting from absence of detection of a feature,
+  despite ions being present at detectable concentrations.  For
+  example in the case of ion suppression or as a result from the
+  stochastic, data-dependent nature of the MS acquisition
+  method. These missing value are expected to be randomly distributed
+  in the data and are defined as **missing at random** (MAR) or
+  **missing completely at random** (MCAR).
+
+* Biologically relevant missing values, resulting from the *absence*
+  or the low abundance of ions (below the limit of detection of the
+  instrument). These missing values are not expected to be randomly
+  distributed in the data and are defined as **missing not at random**
+  (MNAR).
+  
 ```{r naheatmap, echo=FALSE}
 x <- impute(naset, "zero")
 exprs(x)[exprs(x) != 0] <- 1
@@ -858,23 +902,73 @@ heatmap.2(exprs(x), col = c("lightgray", "black"),
           ColSideColors = rep(c("steelblue", "darkolivegreen"), each = 8))
 ```
 
-* Identification tranfer between acquisitions (label-free): if a
-  feautre was not acquired in MS2 in one replicte, it is possible to
-  find the ion in MS space based on the M/Z and retention time
-  coordinates of the same ion in a replicate where it was identified.
+Different imputation methods are more appropriate to different classes
+of missing values (as documented in this
+[paper](http://pubs.acs.org/doi/abs/10.1021/acs.jproteome.5b00981)). Values
+missing at random, and those missing not at random should be imputed
+with different methods.
 
-* One solution is to remove all or part of the features that have
-  missing values (see `?filterNA`) and/or impute missing values
-  (`?impute`). The latter is not a straighforward thing, as is likely
-  to dramatically fail when a high proportion of data is missing (10s
-  of %).
+![RSR KNN and MinDet imputation](./Figures/imp-sim.png)
 
-* Different imputation methods are more appropriate to different
-  classes of missing values (as documented in this
-  [paper](http://pubs.acs.org/doi/abs/10.1021/acs.jproteome.5b00981)). Values
-  missing at random, and those missing not at random should be imputed
-  with different methods: left-censored methods are adequate for the
-  latter, while hot-desk methods should be used for the former.
+It is recommended to use **hot deck** methods (nearest neighbour
+(**left**), maximum likelihood, ...) when data are missing at
+random.Conversely, MNAR features should ideally be imputed with a
+**left-censor** (minimum value (**right**), but not zero, ...) method.
+
+## Coverage
+
+- Coverage in proteomics in `%`
+- [Coverage](http://www.ncbi.nlm.nih.gov/pubmed/24434847) in RNA-Seq in fold `X`
+
+The following values are higher bounds, *without* peptide filtering for
+about 80000 *gene groups* 
+
+
+```{r}
+data(cvg)
+hist(cvg$coverage, breaks = 100, xlab = "coverage", main = "")
+```
+
+And
+
+- the majority of peptides map to a minority of proteins different
+
+- peptides within one protein can be differently detectable in MS
+  acquisitions
+
+
+## Protein inference and protein groups
+
+![Peptide evidence classes](./Figures/nbt0710-647-F2.png)
+
+From [Qeli and Ahrens (2010)](http://www.ncbi.nlm.nih.gov/pubmed/20622826).
+See also [Nesvizhskii and Aebersold (2005)](http://www.ncbi.nlm.nih.gov/pubmed/16009968).
+
+Often, in proteomics experiments, the features represent single
+proteins and **groups** of indistinguishable or non-differentiable
+proteins identified by shared (non-unique) peptides.
+
+## Identifier mapping
+
+The latest UniProt 
+
+```{r up}
+data(upens)
+data(upenst)
+```
+
+Where `upens` and `upenst` where created by querying the Ensembl gene
+and transcript identifiers for all human UniProtKB accession numbers
+against the UniProt web services. (See `?upens` for details.)
+
+
+```{r idmappingplot, echo=FALSE}
+par(mfrow = c(2, 1))
+barplot(table(tapply(upens[, 2], upens[, 1], function(x) length(na.omit(x)))),
+        main = "Ensembl genes - UnitProtKB mapping")
+barplot(table(tapply(upenst[, 2], upenst[, 1], function(x) length(na.omit(x)))),
+        main = "Ensembl transcripts - UnitProtKB mapping")
+```
 
 # Annotation
 
@@ -904,7 +998,7 @@ available.
 
 - Analysis of post translational modification with `r Biocpkg("isboar")`.
 - Processing and analysis or isobaric tagging mass spectrometry with
-  `r Biocpkg("isboar")` and `r Biocpkg("MSnbase")`.
+  `r Biocpkg("isobar")` and `r Biocpkg("MSnbase")`.
 - Analysis of spatial proteomics data with `r Biocpkg("pRoloc")`.
 - Analysis of MALDI data with the `r Biocpkg("MALDIquant")` package.
 - Access to the Proteomics Standard Initiative Common QUery InterfaCe
@@ -913,7 +1007,7 @@ available.
   statistical analysis.
 - `r Biocpkg("MSnID")`: Utilities for Exploration and Assessment of
   Confidence of LC-MSn Proteomics Identifications.
-- `r CRANpkg("protViz") `: Visualizing and Analyzing Mass Spectrometry
+- `r CRANpkg("protViz") `: Visualising and Analysing Mass Spectrometry
   Related Data in Proteomics
 - `r CRANpkg("aLFQ")`: Estimating Absolute Protein Quantities from
   Label-Free LC-MS/MS Proteomics Data.
@@ -926,13 +1020,13 @@ available.
 ### DIA
 
 - Analysis of label-free data from a Synapt G2 (including ion
-  mobility) with `r Biocpkg("synatpter")`.
+  mobility) with `r Biocpkg("synapter")`.
 - `r Biocpkg("SWATH2stats")`: Transform and Filter SWATH Data for
   Statistical Packages and
 - `r Biocpkg("specL")`: Prepare Peptide Spectrum Matches for Use in
   Targeted Proteomics
 - `r Biocpkg("SwathXtend")`: SWATH extended library generation and
-  satistical data analysis
+  statistical data analysis
 
 
 # Session information

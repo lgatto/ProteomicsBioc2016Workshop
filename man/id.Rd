@@ -17,16 +17,4 @@
   
 }
 
-\examples{
-## source files to repeat the search
-library("rpx")
-px <- PXDataset("PXD000001")
-pxfiles(px)
-
-f <- dir(system.file("mzid", package = "RforProteomics"), full.names=TRUE)
-library("mzID")
-id <- mzID(f)
-id
-}
-
 \keyword{datasets}
