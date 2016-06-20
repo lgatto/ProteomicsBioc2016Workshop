@@ -191,7 +191,7 @@ mzf
 
 ## Manual download
 
-```{r}
+```{r manualdownload}
 url <- "http://proteome.sysbiol.cam.ac.uk/lgatto/files/Thermo-HELA-PRT/"
 f1 <- downloadData(file.path(url, "Thermo_Hela_PRTC_1.mzML"))
 f2 <- downloadData(file.path(url, "Thermo_Hela_PRTC_2.mzML"))
