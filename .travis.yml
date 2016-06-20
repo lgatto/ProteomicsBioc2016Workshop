@@ -1,2 +1,9 @@
 language: r
+cache: packages
+
 r: bioc-devel
+
+notifications:
+  email:
+    on_success: lg390@cam.ac.uk
+    on_failure: lg390@cam.ac.uk
