@@ -297,17 +297,21 @@ span.toc-section-number::after {
 
 
 <p><strong>Abstract</strong> In this workshop, we will use R/Bioconductor packages to explore, process, visualise and understand mass spectrometry-based proteomics data, starting with raw data, and proceeding with identification and quantitation data, discussing some of their peculiarities compared to sequencing data along the way. The participants will gain a general overview of Bioconductor packages for mass spectrometry and proteomics, and learn how to navigate raw data and reconstruct quantitative data. The workshop is aimed at a beginner to intermediate level, such as, for example, seasoned R users who want to get started with mass spectrometry and proteomics, or proteomics practitioners who want to familiarise themselves with R and Bioconductor infrastructure.</p>
-<p>This short tutorial is part of the <code>ProteomicsBioc2016Workshop</code> package (version 0.1.0), available at <a href="https://github.com/lgatto/ProteomicsBioc2016Workshop">https://github.com/lgatto/ProteomicsBioc2016Workshop</a>.</p>
+<p>This short tutorial is part of the <code>ProteomicsBioc2016Workshop</code> package (version 0.2.0), available at <a href="https://github.com/lgatto/ProteomicsBioc2016Workshop">https://github.com/lgatto/ProteomicsBioc2016Workshop</a>.</p>
 <blockquote>
 <p>This vignette available under a <a href="http://creativecommons.org/licenses/by/4.0/"><strong>creative common CC-BY</strong></a> license. You are free to <strong>share</strong> (copy and redistribute the material in any medium or format) and <strong>adapt</strong> (remix, transform, and build upon the material) for any purpose, even commercially.</p>
 </blockquote>
-<p><strong>Modified:</strong> 2016-06-20 01:54:07<br /> <strong>Compiled</strong>: Mon Jun 20 01:54:17 2016</p>
+<p><strong>Modified:</strong> 2016-06-20 11:13:41<br /> <strong>Compiled</strong>: Mon Jun 20 11:14:45 2016</p>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <div id="installation-instructions" class="section level2">
 <h2><span class="header-section-number">1.1</span> Installation instructions</h2>
-<p>To install this package and build the vignette</p>
-<pre class="r"><code>biocLite(&quot;lgatto/ProteomicsBioc2016Workshop&quot;,
+<p>To install this package and build the vignette:</p>
+<p>If the <em><a href="http://bioconductor.org/packages/BiocInstaller">BiocInstaller</a></em> is not installted, start with</p>
+<pre class="r"><code>source(&quot;https://bioconductor.org/biocLite.R&quot;)</code></pre>
+<p>then</p>
+<pre class="r"><code>library(&quot;BiocInstaller&quot;) 
+biocLite(&quot;lgatto/ProteomicsBioc2016Workshop&quot;,
          dependencies = TRUE, build_vignettes=TRUE)</code></pre>
 <p>To launch the vignette</p>
 <pre class="r"><code>library(&quot;ProteomicsBioc2016Workshop&quot;)
@@ -398,21 +402,21 @@ ms</code></pre>
 pxannounced()</code></pre>
 <pre><code>## 15 new ProteomeXchange annoucements</code></pre>
 <pre><code>##     Data.Set    Publication.Data             Message
-## 1  PXD004256 2016-06-17 15:21:07                 New
-## 2  PXD004333 2016-06-17 15:12:41                 New
-## 3  PXD003557 2016-06-17 10:36:37                 New
-## 4  PXD003486 2016-06-17 09:30:33                 New
-## 5  PXD004165 2016-06-17 08:59:05 Updated information
-## 6  PXD003758 2016-06-17 08:58:26 Updated information
-## 7  PXD001675 2016-06-16 15:41:02                 New
-## 8  PXD003650 2016-06-16 13:39:20                 New
-## 9  PXD002560 2016-06-16 13:18:11                 New
-## 10 PXD004350 2016-06-16 13:04:46                 New
-## 11 PXD004349 2016-06-16 13:03:26                 New
-## 12 PXD004348 2016-06-16 13:02:17                 New
-## 13 PXD004347 2016-06-16 13:00:47                 New
-## 14 PXD004346 2016-06-16 12:59:45                 New
-## 15 PXD004345 2016-06-16 12:58:46                 New</code></pre>
+## 1  PXD003422 2016-06-20 07:52:04                 New
+## 2  PXD002903 2016-06-20 07:34:35                 New
+## 3  PXD002801 2016-06-20 07:19:56 Updated information
+## 4  PXD004256 2016-06-17 15:21:07                 New
+## 5  PXD004333 2016-06-17 15:12:41                 New
+## 6  PXD003557 2016-06-17 10:36:37                 New
+## 7  PXD003486 2016-06-17 09:30:33                 New
+## 8  PXD004165 2016-06-17 08:59:05 Updated information
+## 9  PXD003758 2016-06-17 08:58:26 Updated information
+## 10 PXD001675 2016-06-16 15:41:02                 New
+## 11 PXD003650 2016-06-16 13:39:20                 New
+## 12 PXD002560 2016-06-16 13:18:11                 New
+## 13 PXD004350 2016-06-16 13:04:46                 New
+## 14 PXD004349 2016-06-16 13:03:26                 New
+## 15 PXD004348 2016-06-16 13:02:17                 New</code></pre>
 <pre class="r"><code>px &lt;- PXDataset(&quot;PXD000001&quot;)
 px</code></pre>
 <pre><code>## Object of class &quot;PXDataset&quot;
@@ -634,7 +638,7 @@ msexp</code></pre>
 ##  MSn M/Z range: 100 2016.66 
 ##  MSn retention times: 25:1 - 25:2 minutes
 ## - - - Processing information - - -
-## Data loaded: Mon Jun 20 01:55:05 2016 
+## Data loaded: Mon Jun 20 11:15:42 2016 
 ##  MSnbase version: 1.20.7 
 ## - - - Meta data  - - -
 ## phenoData
@@ -975,8 +979,8 @@ exprs(msset)</code></pre>
 ## X5.1  11947.881  13061.875  12809.491  12911.479</code></pre>
 <pre class="r"><code>processingData(msset)</code></pre>
 <pre><code>## - - - Processing information - - -
-## Data loaded: Mon Jun 20 01:55:05 2016 
-## iTRAQ4 quantification by trapezoidation: Mon Jun 20 01:55:41 2016 
+## Data loaded: Mon Jun 20 11:15:42 2016 
+## iTRAQ4 quantification by trapezoidation: Mon Jun 20 11:16:33 2016 
 ##  MSnbase version: 1.20.7</code></pre>
 <p><strong>See also</strong> The <em><a href="http://bioconductor.org/packages/isobar">isobar</a></em> package supports quantitation from centroided <code>mgf</code> peak lists or its own tab-separated files that can be generated from Mascot and Phenyx vendor files.</p>
 </div>
@@ -1025,7 +1029,7 @@ exprs(msset)</code></pre>
 ## experimentData: use 'experimentData(object)'
 ## Annotation:  
 ## - - - Processing information - - -
-## mzTab read: Mon Jun 20 01:55:43 2016 
+## mzTab read: Mon Jun 20 11:16:40 2016 
 ##  MSnbase version: 1.20.7</code></pre>
 <p>It is also possible to import arbitrary spreadsheets as <code>MSnSet</code> objects into R with the <code>readMSnSet2</code> function. The main 2 arguments of the function are (1) a text-based spreadsheet or a <code>data.frame</code> and (2) column names of indices that identify the quantitation data.</p>
 <pre class="r"><code>csv &lt;- dir(system.file (&quot;extdata&quot; , package = &quot;pRolocdata&quot;),
@@ -1180,9 +1184,9 @@ naplot(naset, col = &quot;black&quot;)</code></pre>
 <pre class="r"><code>flt &lt;- filterNA(naset)
 processingData(flt)</code></pre>
 <pre><code>## - - - Processing information - - -
-## Subset [689,16][301,16] Mon Jun 20 01:55:44 2016 
-## Removed features with more than 0 NAs: Mon Jun 20 01:55:44 2016 
-## Dropped featureData's levels Mon Jun 20 01:55:44 2016 
+## Subset [689,16][301,16] Mon Jun 20 11:16:42 2016 
+## Removed features with more than 0 NAs: Mon Jun 20 11:16:42 2016 
+## Dropped featureData's levels Mon Jun 20 11:16:42 2016 
 ##  MSnbase version: 1.15.6</code></pre>
 </div>
 <div id="identification-transfer" class="section level3">
@@ -1211,7 +1215,7 @@ processingData(flt)</code></pre>
 <p>The following values are higher bounds, <em>without</em> peptide filtering for about 80000 <em>gene groups</em></p>
 <pre class="r"><code>data(cvg)
 hist(cvg$coverage, breaks = 100, xlab = &quot;coverage&quot;, main = &quot;&quot;)</code></pre>
-<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2" /></p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfgAAAH4CAMAAACR9g9NAAAC91BMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///9ivI7gAAAACXBIWXMAAAsSAAALEgHS3X78AAATZklEQVR4nO2dfXxU1Z3Go9G1kIQEQhGDm1jeq5KIIxLKS4JesNZ3cARXK9DoRQUUi47VLbRFp6C1VmWZtb62rjBVwOrWrYMI7mLUzIJgZRC4IiBEJE7EdkmAwPljz0xuosnMMDPMmYQzz/P9fJKQe899OHO/c19+uXfOzRIEkqzO7gDpHCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB0Wh+Dmmaf5JXRxJKwrFl1vWW1Xq4khaUSi+UohtFK8LFA8KxYNC8aBQPCgUDwrFg0LxoFA8KBQPCsWDQvGgUDwoFA8KxYNC8aBQPCgUDwrFg0LxoCQk/sj+Iwm0onidiC++Ye6AU7Ky+89rjNeQ4nUivvgfj1tdd+jLtdf8JF5DiteJ+OLz94R//F/PeA0pXifiiy97Ovxj2dB4DSleJ+KLrznj7OuqrhtS5I/XkOJ1IoGz+sM+j9vjOxy3HcXrBMs5UFjOgcJyDhSWc6CwnAOF5RwoLOdAYTkHCss5UI6nnNvqDfPU+rYNKV4njqecW+cJY/6ibUOK14kUyrmlT7T9neJ1IoVyjuJ1JoVyjuJ1JoVyjuJ1JoVyjuJ1JoWrcxSvMylcnaN4nWE5BwrLOVBYzoGSwocmKV5nKB6U+OIDLbSfQfE6E1/8pVld+4RpP4PidSaBXf3NM6JPp3idSUD8yoXRp1O8zvDkDhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHhUOagsIhTUHhkKagcEhTUDikKSgc0hQUDmkKCss5UFjOgcJyDhSWc6CwnAOF5Rwox1PO7feHefC3bdtRvE4cTzm3yhXmqnvbtqJ4nWA5BwrLOVBYzoHCcg4UlnOg8OocKAneZftVfeQ0iteZ+OI3jZ1Yd/lp2RW72s+geJ2JL37MjDmF9zY23HlF+xkUrzPxxXf5/OuTGoSoz2s/g+J1Jr744pXVWe8JsXpQ+xkUrzPxxS86tduioqppBX9qP4PidSaBs/qte0RgwYMfRkyneJ3hhyZBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFBs8bPWNCW9KMXrjC1+bunpt70ZOaLZMaF4nWnd1VsPjz79lr8eSmJRiteZVvH13qndzxlRtCxaIz6FKvOwxS+oyBn/u0+EeKt3RAsOW56R2OKnvfx1+Oc/Ird4DluekdjiDz7hE8sXRmzUIThseUZii7/p/Brxwahp0Vpw2PKMxBafa8lvO/KjteCw5RmJLb7fu/Jbdd+oTThseSZii3+xcNZDd/Z8NkYjlnOZR0sdv/lX0+d+ELUFy7mMhE+hAsUWv3LEoBDRWrCcy0hs8cWuDwOSaC1YzmUktvgzDsRswXIuI7HFL3ww9jXZiHKuKRjm6cfbtqN4nbDFj8zJGxjjGC8iyrllRpjSOW1bUbxO2OIDzURrwXIuI2kt55pqj0ZvwXIuI7HF7744p2D7cCtaC5ZzGYktfvyMhpIjcy+K1oLlXEZii+9SL0pEsGu0FiznMhJbfOmrUvyb50RtwqtzmYgtfnXhxLwpPV+P2eyLYOQ0iteZlrP6umfnP7knaovNlRt2DM8+dfTO9jMoXmfiX50bPrvx6lkNjXdf2n4GxeuMLX54M9Fa5H4u+m8V4qvc9jMoXmds8dXV1e94K7zRWox7+OgtHiFePK/9DIrXmW/v6r8si9bis2GDrzy5sqJwbfsZFK8z3xb/QcQj4u3pzy98bEXkdVuK15lvHeMdp9yZ1KIUrzPfHOOrqwMxLtPEgOJ1hiNigGKL71OQb5P4ohSvM7b4xZX/s6fa+G19fX3ii1K8ztjiz/xMfvv8zKQWpXidscX/89vy29qipBaleJ2xxXt63Pvkz3r8OqlFKV5nWs7q37tr0kwfyzkc4t9sGROK15n4N1vGhOJ1Jv7NljGheJ2Jf7NlTCheZxK42TIWFK8zCd5sGQ2K15n4N1vGhOJ1xhY/ZH3yi1K8ztji55sHk16U4nXGFl+Rn9s/9ufjo0PxOhP/8/ExoXidCYvPqRfihb8nuyjF60xYfJYUn7892UUpXmcoHhSKB6VZ/KqampxXampqklqU4nUmLL6whaQWpXid4X31oFA8KBQPCsWDQvGgUDwoFA8KxYOSkHg+fizziC+e49VnJHz8GCjxxXO8+owkvniOV5+RxBfP8eozkgTO6jlefSbCcg4UlnOgsJwDheUcKCznQGE5B8rxlHMvNT9UeMhdbdtRvE6wnAOF5RwoLOdAYTkHCss5UFjOgcKrc6AkepdtdcRJPcVrTaLiC3dFTKJ4nYkvPic7RNbJ2e1nULzOxBe/aYTT2rev+4Z97WdQvM4ksKtvemTQf3JXn2kkdIzfVnljHsVnFomd3B3xTKqLmEjxOsMPTYJC8aBQPCgUDwrFg0LxoFA8KBQPCsWDQvGgUDwoFA8KxYNC8aBQPCgUDwrFg0LxoFA8KBQPCsWDQvGgUDwoFA8KxYNC8aBQPCgUDwrFg0LxoFA8KBQPCsWDwmHLQeGw5aBw2HJQOGw5KBy2HBQOWw4Khy0HheUcKCznQGE5BwrLOVBYzoHCcg6U4ynnvPZDhWe3bUfxOsFyDhSWc6CwnAOF5RwoLOdAYTkHCq/OgZJIORc8Kr818UmTGUUCjxg956S+rwqxPaIlxetMfPFjfn5wTZ8ais8w4ovv8rUQKxxNFJ9ZxBc/8DUhjl59H8VnFvHFL88dtVfsG3oexWcUCZzV1y6XO/vGJfe0n07xOsMPTYJC8aBQPCgUDwrFg0LxoFA8KBQPCsWDolj8ZMuyDqXWI9IhqBX/dp7TOerR1HpEOgS14lcNFOLVhan1iHQIFA8KxYNC8aCkR/wbhmFcVp9az0haUS9+ybUez7VPBYM3bhPiU7/f/0lqHSTpQb34uQ6v9/y5QlRJ8WNcLld5ah0k6SEN4i8X4jIpfuJjXm9p82Ry4pE+8QPv8ni6ysk9DaPiLMOo/I+U+nlCscnn863r7E6kSBrFrxKiQIS/NhQL8ecrPB7PnpT62uk8M8QwircIMe4Bt/uC5knWKMMY82bnduu46DDxvznH6715aUp9TSO/M03TE7fVE7L/szYKYRxuPYK965Lvh2ciWh5d5/c/Lt8m35vict0fMZbIiUDHiZez7zFMc/qXKfU3TYy2LKui7aT9ctLutpNC4ifP9XjOaRZ/eKZpXu0UYvHdPt+qptZWR850OPqd4XJdcL1sNdvvH18rxHter/d/5fvhbXmQODHK3A4VP2maZd20MaX+KmTrdNO81T74VIrWbbheOvJ+JcQtk02zRP7+j2Dw06GGUX6r11v1eyHKfur15jYIkWsYo063LLcsWm4ulZaf8/sDsvVthnFxXyFeLhPizkky8zfyTTXT5Sp2u92nGYaj0OW69mEhXqowjME3meZP5RK3O53Of+/4V9+x4u9s3lU+YBjGHc1bjPl6St1PhaX3+v3/Ms/rXXakVXz9ZKdz1BiPZ+JrzeVosexod6dz/Fmy/4M8nmGy/2UvC9GjIfyyPustxFNSfFWVEOUVppkz2jByhWjo0VZ88RK/v1vzigitn+d+5Hb/6Dm5fl6wrAuDweDIYHDz5OYe+eX6uLWDdggdLv7qn7hcffeGX++OsZa1zJVS92Ozwed7Y4E8n1wr1600u9rlcv38m91x/QzTNO6TfXZKnbWt4rfdGAzeLfvvHGAY+e9E7X8s8U8J0fuz8OQI8Rtag8Lrp9znK29ZP3Jrzxdi53lu96zTHY4eM5r3iDv9fv+FDsfQ29K0bkJ0uPiyBfL9L1dcjtN5eVHzyVGIJyvl2bE8C1onD4Kb2ubuSKh48ssja8lfm//9jNxy5EH29gKvd0ah0znsBSFcz/r9Y/YL8YrHs3iE3HFf6Pdfb4u5+H63e7Bc6ruGMfIH8fufsvgo+b18vlvt/DGDHY5uc1yuPHmWcWXCLh6Sr/ixhFuH6HjxbVect7dhDJ3l8fzwLSHGr/H7z3W7HzCEqJskt4W1zbnXy2PkAHmmFdoH7mq+w6dGbr8TpjUfI21W/UIebPs4HN3l8fi0ar8//xsx84Y5nYPlznvkox7PQK/3j+3FPCSP2uKYYtItPnr+vkKHw+GReyz7Jf5S/ioPCkfnyVf/Rtt1H+XkNA6dLT684i7yegeEVtztLleOEI3yLKi0LBhceJXbffOVTudZ24XIl++DPk7nZb2cztICh6Nglt9fIo+R/eQqkCdGB25yOituip3/42DwglD+Yq83T6GYdIsP5f8x3zDOlsXEMrkCzqyThoPBLy7w+5fMilj3Sf6J9IQQH2PFVfp8ZfdbVpG94rpZ1gvt8+XBsIc8vR5kWfd3jpiOyJ/d1zB6Px0M9pL5eU7nxJ5CbMxo8bqI6YR8igfNp3jQfIoHza8e6XZPkYf+vu9SPFZ+X59vgsyfs9DnW03xePljL3O7yz6neMj8ybUUD5kfuvrXj+IB8+2rfxQPmk/xoPkUD5pP8aD5aRCf8AMHtV5xuuerFp/MAwe1XnG656sWn8wDB7VecbrnqxYf+cDB/zLDGPe2bVhsmpfnm6ajxDSLHaaZf7lpniabfcc0r801zRFFptm/1DQLx8tJVeHJN3Q1zYpepjl4sGn2qjDNrjeEJ1fJr/GFplna3zSLRphm7rXhyaEw5h8jf7Ri8ZEPHAx91EASaPdcqp2WtW2dZW3+0LI+3GxZ67bJL6v16+ONlvW3gGWt39o8aX3z5C0bLOujjyxrw5Y2k7fKn4G/WdbGj9uEMP8Y+XsVi4/5wEGiMwmc1cd64CDRmRTqeKIzFA8KxYNC8aBQPCgUDwrFg0LxoFA8KBQPikLxAx3qGFKsMGygyp4VD1EY1lthlmNUZ4lP7nrwsWn/ocCUiDIO3fETGrxJGSpXWcfdc5faf3xsKD7dYRSfJBSf4n98bCg+3WEUnyQUn+J/fGwoPt1hCsWPUxclPrpDYdjzzysMu+MjhWEqV1mSYQrFKx2dW2XYYZW3jZ2wrzLJMP7lDhSKB4XiQaF4UCgeFIoHheJBoXhQlIn3Dy2YouTvESsGda3cpC4vkCNUhe2+JG/4ZlVhi0u6VATUhF0aevyVHZRwnirxh4ue2m3MVRBUm/fa/n89V1le04hsZZ0b9lDt7EpFYVtPXVk7Y6yKsJU3ZwVaX2LiearEr/y+EKsHKAhaPkqIgycFVeU94sxW1bkPBh8VjRsUhe3Je/frORNVhC2c0TXQ+hITz1Ml3nOdEHWnRBsjKUm+3ivEmu8dVZS3bZCVrapzz191y4AJO1S90kVZJxXWqQnrE2h9iYnnqRLvrhLiUNZ+FVFHV/T5s6K8I2Nf25etqnMLT168ZWa5orBAUfUB1xVqwkLi7aDE81Ru8V9mK9jiRd01jhpVeZ4bxL5sVWGPVQrRkL1PTdiCqtDjtr5SEtayxcugxPNUifcNEWJtPwVBjeff16Qsb1JeYfeswmo1YSuk+IOnBtWEPTgt9C6qVxIWEm8HJZ6n7qx+xYEJ8xQELSnbLmlSk1e3a9eGk3c1qgk7ULhk/z2jFb3SjQVrvpo9Rk1Yn0Dr+k88T1kd/35p4VQVdfc9WSH2KcsL7eoVhf13ae4Pd6gKWzow97KdasJC4luCEs7jX+5AoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UCgeFIoHheJBoXhQKB4UigeF4kGheFAoHhSKB4XiQaF4UADFL+mfN/WQeGlgt2v2iks8QiyYJNaUdb1kjwhUzB8iFvX5TvkWIZ4uKXm2RNgzMhE88Zt7Vm8busjK93059Trxb1cK8YPldT1eCd5+sQjk37Ju7z+t3jdlutjw3fc/G1ki7BmZCJ74+bOEqPE9MkWIL05p2pPbUFvQ8OxEIRpyjgRyD4oDn4jGn00S990txIoSYc/o7C6nAzzx0x8KfXeFPmfUtVaUv+6ZIubnlZSUFNQG+gtx5IHykRdNElMeF2J9ScuMTu5xWsATP3e2EB8sf2Rq6IPkh8WvZ176unhSbv5Hth8NDBJiqWOveH6ScN0jxKslLTM6u8vpAE/8+p7v7Ry1cFv+m8GpE4T4uE/RIbG751v184aLkPhHR3zxjmNcU00vf+3YkpYZmQieePH0Wd2mNgrvgLyrPpe/nT1dfvvL97uM3RYWH7yoS/lfSv4gnug94MVzW2ZkIoDiE+HTjUK8f1Fn9yKdUHxU1gzYfdC5oLN7kU4oPjq/6tX7hr93difSCcWDQvGgUDwoFA8KxYNC8aBQPCgUDwrFg0LxoFA8KBQPCsWDQvGgUDwoFA/K/wMkWviNMf7ThQAAAABJRU5ErkJggg==" alt="plot of chunk unnamed-chunk-1" /></p>
 <p>And</p>
 <ul>
 <li><p>the majority of peptides map to a minority of proteins different</p></li>
@@ -1294,7 +1298,7 @@ data(upenst)</code></pre>
 ## [11] MSnbase_1.20.7                   ProtGenerics_1.4.0              
 ## [13] BiocParallel_1.6.2               mzR_2.6.2                       
 ## [15] Rcpp_0.12.5                      Biobase_2.32.0                  
-## [17] BiocGenerics_0.18.0              ProteomicsBioc2016Workshop_0.1.0
+## [17] BiocGenerics_0.18.0              ProteomicsBioc2016Workshop_0.2.0
 ## [19] BiocStyle_2.0.2                 
 ## 
 ## loaded via a namespace (and not attached):
@@ -1318,7 +1322,7 @@ data(upenst)</code></pre>
 ## [35] xtable_1.8-2                  scales_0.4.0                 
 ## [37] gdata_2.17.0                  affyio_1.42.0                
 ## [39] annotate_1.50.0               biocViews_1.40.0             
-## [41] IRanges_2.6.0                 ggplot2_2.1.0                
+## [41] IRanges_2.6.1                 ggplot2_2.1.0                
 ## [43] survival_2.39-4               RJSONIO_1.3-0                
 ## [45] magrittr_1.5                  mime_0.4                     
 ## [47] evaluate_0.9                  R.methodsS3_1.7.1            
