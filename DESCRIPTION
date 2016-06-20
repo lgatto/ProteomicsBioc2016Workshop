@@ -25,7 +25,10 @@ Suggests:
     gplots,
     Biostrings,
     UniProt.ws,
-    biomaRt
+    biomaRt,
+    msmsTests,
+    lattice,
+    gridExtra
 Imports: utils
 Depends: R (>= 2.10)
 Description: In this workshop, we will use R/Bioconductor packages to
