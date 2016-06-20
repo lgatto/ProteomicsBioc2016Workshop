@@ -199,16 +199,6 @@ mzf <- pxget(px, pxfiles(px)[6])
 mzf
 ```
 
-## Manual download
-
-```{r manualdownload}
-library("RforProteomics")
-url <- "http://proteome.sysbiol.cam.ac.uk/lgatto/files/Thermo-HELA-PRT/"
-f1 <- downloadData(file.path(url, "Thermo_Hela_PRTC_1.mzML"))
-f2 <- downloadData(file.path(url, "Thermo_Hela_PRTC_2.mzML"))
-f1
-```
-
 # Handling raw MS data
 
 The `mzR` package provides an interface to the
@@ -432,11 +422,29 @@ chromatogram(ms)
 
 ## Multiple chromatograms
 
-```{r chromato3, cache=.cache}
+It is of course possible to overlay several chromatograms. The code
+chunks below are not executed dynamically so save time with
+downloading raw data files.
+
+```{r chromato3, eval=FALSE}
+## manual download
+library("RforProteomics")
+url <- "http://proteome.sysbiol.cam.ac.uk/lgatto/files/Thermo-HELA-PRT/"
+f1 <- downloadData(file.path(url, "Thermo_Hela_PRTC_1.mzML"))
+f2 <- downloadData(file.path(url, "Thermo_Hela_PRTC_2.mzML"))
+f3 <- downloadData(file.path(url, "Thermo_Hela_PRTC_3.mzML"))
+```
+
+```{r chromato3plot, eval=FALSE}
+## plotting
 c1 <- chromatogram(f1)
 c2 <- chromatogram(f2, plot = FALSE)
-lines(c2, col = "steelblue", lty = "dashed")
+lines(c2, col = "steelblue", lty = "dashed", lwd = 2)
+c3 <- chromatogram(f3, plot = FALSE)
+lines(c2, col = "orange", lty = "dotted")
 ```
+
+![Multiple chomatograms](./Figures/chromatograms.png)
 
 ## An extracted ion chromatogram
 
