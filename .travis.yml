@@ -1,6 +1,9 @@
 language: r
 cache: packages
 
+sudo: true
+apt_packages: libnetcdf-dev
+
 r: bioc-release
 
 r_packages:
@@ -11,13 +14,11 @@ r_packages:
   - rmarkdown
   - knitr
 
-r_github_packages:
-  - lgatto/MSnbase
-
 bioc_packages:
+  - mzR
+  - MSnbase
   - RforProteomics
   - Biobase
-  - mzR
   - mzID
   - rpx
   - MLInterfaces
