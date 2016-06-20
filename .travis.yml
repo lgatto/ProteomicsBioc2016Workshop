@@ -4,11 +4,11 @@ cache: packages
 r: bioc-devel
 
 bioc_packages:
+   - MSnbase
    - RforProteomics
    - Biobase
    - mzR
    - mzID
-   - MSnbase
    - rpx
    - MLInterfaces
    - pRoloc
