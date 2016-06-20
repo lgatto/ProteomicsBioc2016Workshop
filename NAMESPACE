@@ -1,3 +1,4 @@
 importFrom("utils", "vignette")
+importFrom("Biobase", "addVigs2WinMenu")
 
 export(bioc2016)
