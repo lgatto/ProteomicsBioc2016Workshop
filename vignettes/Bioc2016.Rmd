@@ -9,6 +9,7 @@ vignette: >
   % \VignetteIndexEntry{R/Bioconductor tools for mass spectrometry-based proteomics}
   % \VignetteEngine{knitr::rmarkdown}
   % \VignetteKeyword{proteomics, mass spectrometry, data}
+  % \VignettePackage{ProteomicsBioc2016Workshop}
 ---
 
 
@@ -62,9 +63,18 @@ available at https://github.com/lgatto/ProteomicsBioc2016Workshop.
 
 ## Installation instructions
 
-To install this package and build the vignette
+To install this package and build the vignette:
+
+If the `r Biocpkg("BiocInstaller")` is not installted, start with
+
+```{r}
+source("https://bioconductor.org/biocLite.R")
+```
+
+then
 
 ```{r install, eval=FALSE}
+library("BiocInstaller") 
 biocLite("lgatto/ProteomicsBioc2016Workshop",
          dependencies = TRUE, build_vignettes=TRUE)
 ```
