@@ -67,7 +67,7 @@ To install this package and build the vignette:
 
 If the `r Biocpkg("BiocInstaller")` is not installted, start with
 
-```{r}
+```{r src, eval=FALSE}
 source("https://bioconductor.org/biocLite.R")
 ```
 
@@ -202,6 +202,7 @@ mzf
 ## Manual download
 
 ```{r manualdownload}
+library("RforProteomics")
 url <- "http://proteome.sysbiol.cam.ac.uk/lgatto/files/Thermo-HELA-PRT/"
 f1 <- downloadData(file.path(url, "Thermo_Hela_PRTC_1.mzML"))
 f2 <- downloadData(file.path(url, "Thermo_Hela_PRTC_2.mzML"))
