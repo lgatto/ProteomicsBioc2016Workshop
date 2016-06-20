@@ -17,7 +17,7 @@ vignette: >
 BiocStyle::markdown()
 ```
 
-```{r env, echo=FALSE}
+```{r env, echo=FALSE, warning=FALSE}
 .cache <- FALSE
 suppressPackageStartupMessages(library("ProteomicsBioc2016Workshop"))
 suppressPackageStartupMessages(library("RforProteomics"))
