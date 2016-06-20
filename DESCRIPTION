@@ -9,6 +9,7 @@ Suggests:
     mzR,
     mzID,
     MSnbase,
+    Pbase,
     rpx,
     MLInterfaces,
     pRoloc,

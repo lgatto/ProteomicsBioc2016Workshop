@@ -1,10 +1,11 @@
 language: r
 cache: packages
 
-r: bioc-devel
+r: bioc-release
 
 bioc_packages:
    - MSnbase
+   - Pbase
    - RforProteomics
    - Biobase
    - mzR
