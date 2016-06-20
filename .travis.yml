@@ -1,11 +1,13 @@
 language: r
 cache: packages
 
-sudo: false
+sudo: true
 apt_packages: libnetcdf-dev
 
 r: bioc-release
-    
+
+r_check_args: --no-vignettes
+
 notifications:
   email:
     on_success: lg390@cam.ac.uk
