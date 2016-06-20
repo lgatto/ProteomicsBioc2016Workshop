@@ -229,12 +229,10 @@ head(peaks(ms, 234))
 str(peaks(ms, 1:5))
 ```
 
-#### Exercise
-
-> Extract the index of the MS2 spectrum with the highest base peak
-> intensity and plot its spectrum (using the `plot` method - we will
-> see more about MS data visualisation in the next section). Is the
-> data centroided or in profile mode?
+> **Exercise** Extract the index of the MS2 spectrum with the highest
+> base peak intensity and plot its spectrum (using the `plot` method -
+> we will see more about MS data visualisation in the next
+> section). Is the data centroided or in profile mode?
 
 ```{r, ex_raw, echo=FALSE, eval=FALSE, fig.align='center'}
 hd2 <- hd[hd$msLevel == 2, ]
@@ -296,11 +294,9 @@ The identification data can be accessed as a `data.frame` with the
 head(psms(id2))
 ```
 
-#### Exercise
-
-> Is there a relation between the length of a protein and the number
-> of identified peptides, conditioned by the (average) e-value of the
-> identifications?
+> **Exercise** Is there a relation between the length of a protein and
+> the number of identified peptides, conditioned by the (average)
+> e-value of the identifications?
 
 ```{r, ex_id, echo = FALSE, eval=FALSE}
 fid <- flatten(id)
