@@ -5,35 +5,6 @@ sudo: true
 apt_packages: libnetcdf-dev
 
 r: bioc-release
-
-r_packages:
-  - lattice
-  - utils
-  - gridExtra
-  - gplots
-  - rmarkdown
-  - knitr
-
-bioc_packages:
-  - mzR
-  - MSnbase
-  - RforProteomics
-  - Biobase
-  - mzID
-  - rpx
-  - MLInterfaces
-  - pRoloc
-  - pRolocdata
-  - BiocInstaller
-  - rTANDEM
-  - BiocStyle
-  - AnnotationHub
-  - MSGFplus
-  - Biostrings
-  - UniProt.ws
-  - biomaRt
-  - msmsTests
-
     
 notifications:
   email:
