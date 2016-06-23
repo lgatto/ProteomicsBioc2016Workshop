@@ -663,7 +663,7 @@ cat("</tr></table>")
 ```
 
 
-# Identification data
+# Visualising identification data
 
 Annotated spectra and comparing spectra. 
 
