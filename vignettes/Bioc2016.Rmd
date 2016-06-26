@@ -717,7 +717,7 @@ dimnames(qtb) <- list(
 knitr::kable(qtb)
 ```
 
-* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` and `r Biocpkg("isboar")`.
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` and `r Biocpkg("isobar")`.
 * Label-free: `r Biocpkg("xcms")` (metabolomics).
 * Counting: `r Biocpkg("MSnbase")` and `r Biocpkg("MSnID")` for
   peptide-spectrum matching confidence assessment.
@@ -823,7 +823,7 @@ streamline and track the process:
 
 ## Differentially expression
 
-* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("isboar")`
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("isobar")`
 * Label-free: `r CRANpkg("aLFQ")` and `r CRANpkg("protiq")`
 * `r Biocpkg("msmsTests")` for the RNA-seq count-based models and
   tests
@@ -1012,7 +1012,7 @@ available.
 
 ## Other relevant packages/pipelines
 
-- Analysis of post translational modification with `r Biocpkg("isboar")`.
+- Analysis of post translational modification with `r Biocpkg("isobar")`.
 - Processing and analysis or isobaric tagging mass spectrometry with
   `r Biocpkg("isobar")` and `r Biocpkg("MSnbase")`.
 - Analysis of spatial proteomics data with `r Biocpkg("pRoloc")`.
