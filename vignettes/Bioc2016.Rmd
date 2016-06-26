@@ -231,11 +231,11 @@ str(peaks(ms, 1:5))
 ```
 
 > **Exercise** Extract the index of the MS2 spectrum with the highest
-> base peak intensity and plot its spectrum (using the `plot` method -
-> we will see more about MS data visualisation in the next
-> section). Is the data centroided or in profile mode?
+> base peak intensity and plot its spectrum (we will see more about
+> MS data visualisation in the next section). Is the data centroided
+> or in profile mode?
 
-```{r, ex_raw, echo=TRUE, eval=TRUE, fig.align='center'}
+```{r ex_raw, echo=TRUE, eval=TRUE, fig.align='center'}
 hd2 <- hd[hd$msLevel == 2, ]
 i <- which.max(hd2$basePeakIntensity)
 hd2[i, ]
@@ -243,7 +243,11 @@ pi <- peaks(ms, hd2[i, 1])
 plot(pi, type = "h")
 mz <- hd2[i, "basePeakMZ"]
 plot(pi, type = "h", xlim = c(mz-0.5, mz+0.5))
+```
 
+Zooming into spectrum 100.
+
+```{r ex_raw2}
 pj <- peaks(ms, 100)
 plot(pj, type = "l")
 plot(pj, type = "l", xlim = c(536,540))
@@ -717,7 +721,7 @@ dimnames(qtb) <- list(
 knitr::kable(qtb)
 ```
 
-* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` and `r Biocpkg("isboar")`.
+* Isobaric tagging (iTRAQ and TMT): `r Biocpkg("MSnbase")` and `r Biocpkg("isobar")`.
 * Label-free: `r Biocpkg("xcms")` (metabolomics).
 * Counting: `r Biocpkg("MSnbase")` and `r Biocpkg("MSnID")` for
   peptide-spectrum matching confidence assessment.
