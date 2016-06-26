@@ -235,7 +235,7 @@ str(peaks(ms, 1:5))
 > we will see more about MS data visualisation in the next
 > section). Is the data centroided or in profile mode?
 
-```{r, ex_raw, echo=FALSE, eval=FALSE, fig.align='center'}
+```{r, ex_raw, echo=TRUE, eval=TRUE, fig.align='center'}
 hd2 <- hd[hd$msLevel == 2, ]
 i <- which.max(hd2$basePeakIntensity)
 hd2[i, ]
@@ -299,7 +299,7 @@ head(psms(id2))
 > the number of identified peptides, conditioned by the (average)
 > e-value of the identifications?
 
-```{r, ex_id, echo = FALSE, eval=FALSE}
+```{r, ex_id, echo=TRUE, eval=TRUE}
 fid <- flatten(id)
 x <- by(fid, fid$accession, function(x)
     c(unique(x$length),
