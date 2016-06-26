@@ -297,11 +297,11 @@ span.toc-section-number::after {
 
 
 <p><strong>Abstract</strong> In this workshop, we will use R/Bioconductor packages to explore, process, visualise and understand mass spectrometry-based proteomics data, starting with raw data, and proceeding with identification and quantitation data, discussing some of their peculiarities compared to sequencing data along the way. The participants will gain a general overview of Bioconductor packages for mass spectrometry and proteomics, and learn how to navigate raw data and reconstruct quantitative data. The workshop is aimed at a beginner to intermediate level, such as, for example, seasoned R users who want to get started with mass spectrometry and proteomics, or proteomics practitioners who want to familiarise themselves with R and Bioconductor infrastructure.</p>
-<p>This short tutorial is part of the <code>ProteomicsBioc2016Workshop</code> package (version 0.2.0), available at <a href="https://github.com/lgatto/ProteomicsBioc2016Workshop">https://github.com/lgatto/ProteomicsBioc2016Workshop</a>.</p>
+<p>This short tutorial is part of the <code>ProteomicsBioc2016Workshop</code> package (version 0.2.2), available at <a href="https://github.com/lgatto/ProteomicsBioc2016Workshop">https://github.com/lgatto/ProteomicsBioc2016Workshop</a>.</p>
 <blockquote>
 <p>This vignette available under a <a href="http://creativecommons.org/licenses/by/4.0/"><strong>creative common CC-BY</strong></a> license. You are free to <strong>share</strong> (copy and redistribute the material in any medium or format) and <strong>adapt</strong> (remix, transform, and build upon the material) for any purpose, even commercially.</p>
 </blockquote>
-<p><strong>Modified:</strong> 2016-06-23 20:31:46<br /> <strong>Compiled</strong>: Thu Jun 23 20:31:56 2016</p>
+<p><strong>Modified:</strong> 2016-06-23 20:34:52<br /> <strong>Compiled</strong>: Sun Jun 26 03:19:33 2016</p>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <div id="installation-instructions" class="section level2">
@@ -319,7 +319,7 @@ bioc2016()</code></pre>
 </div>
 <div id="msproteomics-software-available-in-bioconductor" class="section level2">
 <h2><span class="header-section-number">1.2</span> MS/proteomics software available in Bioconductor</h2>
-<p>In Bioconductor version 3.3, there are respectively 85 proteomics and 55 mass spectrometry software packages and 14 mass spectrometry experiment packages. These respective packages can be extracted with the <code>proteomicsPackages()</code>, <code>massSpectrometryPackages()</code> and <code>massSpectrometryDataPackages()</code> and explored interactively.</p>
+<p>In Bioconductor version 3.4, there are respectively 83 proteomics and 55 mass spectrometry software packages and 15 mass spectrometry experiment packages. These respective packages can be extracted with the <code>proteomicsPackages()</code>, <code>massSpectrometryPackages()</code> and <code>massSpectrometryDataPackages()</code> and explored interactively.</p>
 <pre class="r"><code>library(&quot;RforProteomics&quot;)
 pp &lt;- proteomicsPackages(&quot;3.3&quot;)
 display(pp)</code></pre>
@@ -378,8 +378,8 @@ ah &lt;- AnnotationHub()</code></pre>
 ## # $dataprovider: PRIDE
 ## # $species: Erwinia carotovora
 ## # $rdataclass: AAStringSet, MSnSet, mzRident, mzRpwiz
-## # additional mcols(): taxonomyid, genome, description, tags,
-## #   sourceurl, sourcetype 
+## # additional mcols(): taxonomyid, genome, description,
+## #   preparerclass, tags, sourceurl, sourcetype 
 ## # retrieve records with, e.g., 'object[[&quot;AH49006&quot;]]' 
 ## 
 ##             title                                                         
@@ -402,21 +402,21 @@ ms</code></pre>
 pxannounced()</code></pre>
 <pre><code>## 15 new ProteomeXchange annoucements</code></pre>
 <pre><code>##     Data.Set    Publication.Data             Message
-## 1  PXD003718 2016-06-23 11:59:49                 New
-## 2  PXD004174 2016-06-23 09:15:03                 New
-## 3  PXD002554 2016-06-23 09:03:25                 New
-## 4  PXD001890 2016-06-23 08:01:02 Updated information
-## 5  PXD003861 2016-06-22 20:04:04                 New
-## 6  PXD003326 2016-06-22 13:50:09                 New
-## 7  PXD004081 2016-06-22 13:30:33                 New
-## 8  PXD003943 2016-06-22 10:40:18                 New
-## 9  PXD002823 2016-06-22 09:18:12                 New
-## 10 PXD004411 2016-06-21 18:46:36 Updated information
-## 11 PXD004408 2016-06-21 17:41:39                 New
-## 12 PXD004404 2016-06-21 17:41:31                 New
-## 13 PXD004403 2016-06-21 17:41:28                 New
-## 14 PXD004402 2016-06-21 17:41:26                 New
-## 15 PXD004401 2016-06-21 17:41:23                 New</code></pre>
+## 1  PXD000275 2016-06-25 07:30:28 Updated information
+## 2  PXD001533 2016-06-24 18:34:35                 New
+## 3  PXD001580 2016-06-24 18:14:28                 New
+## 4  PXD001585 2016-06-24 17:41:38                 New
+## 5  PXD001621 2016-06-24 16:55:41                 New
+## 6  PXD001624 2016-06-24 16:42:12                 New
+## 7  PXD001631 2016-06-24 16:24:27                 New
+## 8  PXD001635 2016-06-24 15:49:53                 New
+## 9  PXD001654 2016-06-24 15:46:02                 New
+## 10 PXD001664 2016-06-24 15:31:28                 New
+## 11 PXD003660 2016-06-24 13:52:05                 New
+## 12 PXD000275 2016-06-24 09:09:19                 New
+## 13 PXD003718 2016-06-23 11:59:49                 New
+## 14 PXD004174 2016-06-23 09:15:03                 New
+## 15 PXD002554 2016-06-23 09:03:25                 New</code></pre>
 <pre class="r"><code>px &lt;- PXDataset(&quot;PXD000001&quot;)
 px</code></pre>
 <pre><code>## Object of class &quot;PXDataset&quot;
@@ -630,11 +630,11 @@ msexp</code></pre>
 ##  MSn M/Z range: 100 2016.66 
 ##  MSn retention times: 25:1 - 25:2 minutes
 ## - - - Processing information - - -
-## Data loaded: Thu Jun 23 20:33:06 2016 
-##  MSnbase version: 1.20.7 
+## Data loaded: Sun Jun 26 03:20:31 2016 
+##  MSnbase version: 1.21.7 
 ## - - - Meta data  - - -
 ## phenoData
-##   rowNames: 1
+##   rowNames: dummyiTRAQ.mzXML
 ##   varLabels: sampleNames
 ##   varMetadata: labelDescription
 ## Loaded from:
@@ -981,9 +981,9 @@ exprs(msset)</code></pre>
 ## X5.1  11947.881  13061.875  12809.491  12911.479</code></pre>
 <pre class="r"><code>processingData(msset)</code></pre>
 <pre><code>## - - - Processing information - - -
-## Data loaded: Thu Jun 23 20:33:06 2016 
-## iTRAQ4 quantification by trapezoidation: Thu Jun 23 20:33:38 2016 
-##  MSnbase version: 1.20.7</code></pre>
+## Data loaded: Sun Jun 26 03:20:31 2016 
+## iTRAQ4 quantification by trapezoidation: Sun Jun 26 03:21:00 2016 
+##  MSnbase version: 1.21.7</code></pre>
 <p><strong>See also</strong> The <em><a href="http://bioconductor.org/packages/isobar">isobar</a></em> package supports quantitation from centroided <code>mgf</code> peak lists or its own tab-separated files that can be generated from Mascot and Phenyx vendor files.</p>
 </div>
 <div id="label-free-ms2" class="section level3">
@@ -991,14 +991,14 @@ exprs(msset)</code></pre>
 <p>Other MS2 quantitation methods available in <code>quantify</code> include the (normalised) spectral index <code>SI</code> and (normalised) spectral abundance factor <code>SAF</code> or simply a simple count method.</p>
 <pre class="r"><code>exprs(si &lt;- quantify(msexp, method = &quot;SIn&quot;))</code></pre>
 <pre><code>## Combined 2 features into 2 using sum</code></pre>
-<pre><code>##                   1
-## ECA0510 0.003588641
-## ECA1028 0.001470129</code></pre>
+<pre><code>##         dummyiTRAQ.mzXML
+## ECA0510      0.003588641
+## ECA1028      0.001470129</code></pre>
 <pre class="r"><code>exprs(saf &lt;- quantify(msexp, method = &quot;NSAF&quot;))</code></pre>
 <pre><code>## Combined 2 features into 2 using user-defined function</code></pre>
-<pre><code>##                 1
-## ECA0510 0.6235828
-## ECA1028 0.3764172</code></pre>
+<pre><code>##         dummyiTRAQ.mzXML
+## ECA0510        0.6235828
+## ECA1028        0.3764172</code></pre>
 <p>Note that spectra that have not been assigned any peptide (<code>NA</code>) or that match non-unique peptides (<code>npsm &gt; 1</code>) are discarded in the counting process.</p>
 </div>
 <div id="spectral-counting" class="section level3">
@@ -1013,7 +1013,8 @@ exprs(msset)</code></pre>
 <pre><code>## Downloading 1 file</code></pre>
 <pre><code>## F063721.dat-mztab.txt already present.</code></pre>
 <pre class="r"><code>(mzt &lt;- readMzTabData(mztf, what = &quot;PEP&quot;, version = &quot;0.9&quot;))</code></pre>
-<pre><code>## Version 0.9 is deprecated. Please see '?readMzTabData' and '?MzTab' for details.</code></pre>
+<pre><code>## Warning: Version 0.9 is deprecated. Please see '?readMzTabData' and '?
+## MzTab' for details.</code></pre>
 <pre><code>## Detected a metadata section</code></pre>
 <pre><code>## Detected a peptide section</code></pre>
 <pre><code>## MSnSet (storageMode: lockedEnvironment)
@@ -1031,8 +1032,8 @@ exprs(msset)</code></pre>
 ## experimentData: use 'experimentData(object)'
 ## Annotation:  
 ## - - - Processing information - - -
-## mzTab read: Thu Jun 23 20:33:49 2016 
-##  MSnbase version: 1.20.7</code></pre>
+## mzTab read: Sun Jun 26 03:21:08 2016 
+##  MSnbase version: 1.21.7</code></pre>
 <p>It is also possible to import arbitrary spreadsheets as <code>MSnSet</code> objects into R with the <code>readMSnSet2</code> function. The main 2 arguments of the function are (1) a text-based spreadsheet or a <code>data.frame</code> and (2) column names of indices that identify the quantitation data.</p>
 <pre class="r"><code>csv &lt;- dir(system.file (&quot;extdata&quot; , package = &quot;pRolocdata&quot;),
            full.names = TRUE, pattern = &quot;pr800866n_si_004-rep1.csv&quot;)
@@ -1186,9 +1187,9 @@ naplot(naset, col = &quot;black&quot;)</code></pre>
 <pre class="r"><code>flt &lt;- filterNA(naset)
 processingData(flt)</code></pre>
 <pre><code>## - - - Processing information - - -
-## Subset [689,16][301,16] Thu Jun 23 20:33:50 2016 
-## Removed features with more than 0 NAs: Thu Jun 23 20:33:50 2016 
-## Dropped featureData's levels Thu Jun 23 20:33:50 2016 
+## Subset [689,16][301,16] Sun Jun 26 03:21:10 2016 
+## Removed features with more than 0 NAs: Sun Jun 26 03:21:10 2016 
+## Dropped featureData's levels Sun Jun 26 03:21:10 2016 
 ##  MSnbase version: 1.15.6</code></pre>
 </div>
 <div id="identification-transfer" class="section level3">
@@ -1293,46 +1294,46 @@ data(upenst)</code></pre>
 ## 
 ## other attached packages:
 ##  [1] rpx_1.9.2                        gplots_3.0.1                    
-##  [3] msmsTests_1.10.0                 msmsEDA_1.10.0                  
-##  [5] mzID_1.10.2                      gridExtra_2.2.1                 
-##  [7] lattice_0.20-33                  BiocInstaller_1.22.2            
-##  [9] AnnotationHub_2.4.2              RforProteomics_1.10.2           
-## [11] MSnbase_1.20.7                   ProtGenerics_1.5.0              
-## [13] BiocParallel_1.7.4               mzR_2.6.2                       
-## [15] Rcpp_0.12.5                      Biobase_2.32.0                  
-## [17] BiocGenerics_0.19.1              ProteomicsBioc2016Workshop_0.2.0
-## [19] BiocStyle_2.1.7                 
+##  [3] msmsTests_1.11.0                 msmsEDA_1.11.0                  
+##  [5] mzID_1.11.2                      gridExtra_2.2.1                 
+##  [7] lattice_0.20-33                  BiocInstaller_1.23.4            
+##  [9] AnnotationHub_2.5.4              RforProteomics_1.11.2           
+## [11] MSnbase_1.21.7                   ProtGenerics_1.5.0              
+## [13] BiocParallel_1.7.4               mzR_2.7.3                       
+## [15] Rcpp_0.12.5                      Biobase_2.33.0                  
+## [17] BiocGenerics_0.19.1              ProteomicsBioc2016Workshop_0.2.2
+## [19] BiocStyle_2.1.11                
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] httr_1.2.0                    edgeR_3.14.0                 
-##  [3] vsn_3.40.0                    interactiveDisplay_1.10.2    
+##  [1] httr_1.2.0                    edgeR_3.15.0                 
+##  [3] vsn_3.41.0                    interactiveDisplay_1.11.2    
 ##  [5] splines_3.3.0                 foreach_1.4.3                
 ##  [7] R.utils_2.3.0                 gtools_3.5.0                 
-##  [9] shiny_0.13.2                  interactiveDisplayBase_1.10.3
-## [11] highr_0.6                     affy_1.50.0                  
-## [13] stats4_3.3.0                  RBGL_1.48.1                  
-## [15] Category_2.38.0               impute_1.47.0                
-## [17] RSQLite_1.0.0                 limma_3.29.10                
+##  [9] shiny_0.13.2                  interactiveDisplayBase_1.11.3
+## [11] highr_0.6                     affy_1.51.0                  
+## [13] stats4_3.3.0                  RBGL_1.49.1                  
+## [15] Category_2.39.0               impute_1.47.0                
+## [17] RSQLite_1.0.0                 limma_3.29.12                
 ## [19] RUnit_0.4.31                  digest_0.6.9                 
 ## [21] RColorBrewer_1.1-2            qvalue_2.5.2                 
 ## [23] colorspace_1.2-6              htmltools_0.3.5              
 ## [25] httpuv_1.3.3                  preprocessCore_1.35.0        
 ## [27] Matrix_1.2-6                  R.oo_1.20.0                  
-## [29] plyr_1.8.4                    GSEABase_1.34.0              
+## [29] plyr_1.8.4                    GSEABase_1.35.0              
 ## [31] MALDIquant_1.14               XML_3.98-1.4                 
-## [33] genefilter_1.54.2             zlibbioc_1.18.0              
+## [33] genefilter_1.55.2             zlibbioc_1.19.0              
 ## [35] xtable_1.8-2                  scales_0.4.0                 
-## [37] gdata_2.17.0                  affyio_1.42.0                
-## [39] annotate_1.50.0               biocViews_1.40.0             
-## [41] IRanges_2.6.1                 ggplot2_2.1.0                
+## [37] gdata_2.17.0                  affyio_1.43.0                
+## [39] annotate_1.51.0               biocViews_1.41.5             
+## [41] IRanges_2.7.11                ggplot2_2.1.0                
 ## [43] survival_2.39-4               RJSONIO_1.3-0                
 ## [45] magrittr_1.5                  mime_0.4                     
 ## [47] evaluate_0.9                  R.methodsS3_1.7.1            
 ## [49] doParallel_1.0.10             MASS_7.3-45                  
-## [51] graph_1.50.0                  tools_3.3.0                  
+## [51] graph_1.51.0                  tools_3.3.0                  
 ## [53] formatR_1.4                   stringr_1.0.0                
-## [55] S4Vectors_0.10.1              munsell_0.4.3                
-## [57] AnnotationDbi_1.34.3          pcaMethods_1.64.0            
+## [55] S4Vectors_0.11.7              munsell_0.4.3                
+## [57] AnnotationDbi_1.35.3          pcaMethods_1.65.0            
 ## [59] caTools_1.17.1                grid_3.3.0                   
 ## [61] RCurl_1.95-4.8                iterators_1.0.8              
 ## [63] labeling_0.3                  bitops_1.0-6                 
